@@ -1,0 +1,30 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+
+Vue.use(VueRouter)
+
+const routes = [
+  {
+    path: '/',
+    name: 'ListaLaboratorios',
+    component: () => import('../views/ListaLaboratorios.vue')
+  },
+  {
+    path: '/:nameLab',
+    name: 'DatosLaboratorios',
+    component: () => import('../views/DatosLaboratorio.vue')
+  },
+  {
+    path: '/admins',
+    name: 'Admins',
+    component: () => import('../views/Admins/Admins.vue')
+  }
+]
+
+const router = new VueRouter({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes
+})
+
+export default router
