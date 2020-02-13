@@ -11,16 +11,19 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="usuario" clearable />
+                                <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="usuario.usuario" clearable />
                             </v-col>
                         </v-row>
                          <v-row>
                             <v-col cols="12">
-                                <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="contraseña" clearable />
+                                <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="usuario.password" clearable
+                                    :append-icon="usuario.show ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                    :type="usuario.show ? 'text' : 'password'"
+                                    @click:append="usuario.show = !usuario.show"/>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-btn block :disabled="!isValid" color="success" rounded>Ingresar</v-btn>
+                            <v-btn block :disabled="!isValid" color="success" @click="login(usuario)" rounded>Ingresar</v-btn>
                         </v-row>
                         <div class="text-center my-2">
                             <span>¿No tienes cuenta?</span><a @click="openModalStudent()"> Regístrate ahora</a>
@@ -36,6 +39,7 @@
 <script>
 import { EventBus } from '../EventBus'
 import Registro from '@/components/Alumnos/Registro.vue'
+import { mapActions } from 'vuex'
 
 export default {
     props: ['openModel'],
@@ -53,8 +57,11 @@ export default {
             value => !!value || "Contraseña requerida",
             value => (value || '').length >= 8 || "La contraseña debe de tener un minimo de 8 caracteres" 
         ],
-        usuario: "",
-        contraseña: ""
+        usuario: {
+            usuario: '',
+            password: '',
+            show: false
+        }
     }),
 
     methods: {
@@ -66,7 +73,9 @@ export default {
         closeModalLogin(){
             this.$refs.formLogin.reset();
             EventBus.$emit("closeLogin");
-        }
+        },
+
+        ...mapActions(["login"])
     },
 
     mounted(){

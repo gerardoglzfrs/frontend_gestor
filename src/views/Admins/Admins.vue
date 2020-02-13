@@ -1,24 +1,18 @@
 <template>
-  <div>
-      <Navbar />
-      <CardLaboratorios />
-      <v-row>
-        <p>dmd</p>
-      </v-row>
-  </div>
+    <div>
+        <navAdmin />
+        <CardsLaboratorios />
+        
+    </div>
 </template>
 
 <script>
-import Navbar from '@/components/Navbar'
-import CardLaboratorios from '@/components/CardsLaboratorios'
+import navAdmin from '@/components/navegacion/navAdmin'
+import CardsLaboratorios from '@/components/CardsLaboratorios'
 
 export default {
-  name: 'Admins',
-  components: {Navbar, CardLaboratorios}
-
+    name: 'Admins',
+    components: { navAdmin, CardsLaboratorios }
 }
+
 </script>
-
-<style>
-
-</style>

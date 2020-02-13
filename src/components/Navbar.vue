@@ -1,9 +1,10 @@
 <template>
     <div>
+        <!-- Navbar para logeo -->
         <v-toolbar color="primary" dark> 
-          
-          <v-spacer></v-spacer>
-          <v-btn text @click="open"><v-icon>fa fa-user</v-icon> Iniciar sesion</v-btn>
+          <v-toolbar-title><v-img src="@/assets/logo.png"></v-img></v-toolbar-title>
+          <v-spacer />
+          <v-btn text @click="open"><v-icon>mdi-user</v-icon> Iniciar sesion</v-btn>
         </v-toolbar> 
         <Login :openModel="abrirLogin" />  
     </div>

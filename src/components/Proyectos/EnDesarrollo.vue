@@ -25,19 +25,11 @@
                         </v-tooltip>
                         <v-tooltip bottom>
                             <template v-slot:activator="{on}">
-                                <v-btn text icon color="green" v-on="on">
-                                    <v-icon>fa fa-check</v-icon>
+                                <v-btn text icon color="primary" v-on="on">
+                                    <v-icon>fa fa-calendar-check-o</v-icon>
                                 </v-btn>
                             </template>
-                            <span>Aceptar proyecto</span>
-                        </v-tooltip>
-                        <v-tooltip bottom>
-                            <template v-slot:activator="{on}">
-                                <v-btn text icon color="red" v-on="on">
-                                    <v-icon>fa fa-trash</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Eliminar proyecto</span>
+                            <span>Ver información</span>
                         </v-tooltip>
                     </template>
                 </v-data-table>
@@ -47,11 +39,9 @@
 </template>
 
 <script>
-
 export default {
-    name: 'NuevosProyecto',
-
-    data: () => ({
+    name: "EnDesarrollo",
+     data: () => ({
         headers: [
             {text: "Numero", value: "numero", filerable: false},
             {text: "Nombre", value: "nombre"},
@@ -64,6 +54,5 @@ export default {
         filtro: "",
         loading: true
     })
-
 }
 </script>

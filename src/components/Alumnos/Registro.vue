@@ -15,42 +15,42 @@
                                 <v-text-field prepend-icon="fa fa-user" label="Nombre"  v-model="datosRegistro.nombre" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-spellcheck" label="Apellido paterno" v-model="datosRegistro.apellidoP" clearable />
+                                <v-text-field prepend-icon="fa fa-id-card" label="Apellido paterno" v-model="datosRegistro.apellidoP" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-spellcheck" label="Apellido materno" v-model="datosRegistro.apellidoM" clearable />
+                                <v-text-field prepend-icon="fa fa-id-card" label="Apellido materno" v-model="datosRegistro.apellidoM" clearable />
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-home" label="Domicilio" v-model="datosRegistro.domicilio" clearable />
+                                <v-text-field prepend-icon="fa fa-map-marker" label="Domicilio" v-model="datosRegistro.domicilio" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-phone" label="Numero telefono" v-model="datosRegistro.telefono" clearable />
+                                <v-text-field prepend-icon="fa fa-phone" label="Numero telefono" v-model="datosRegistro.telefono" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-email" label="Correo" v-model="datosRegistro.correo" clearable />
+                                <v-text-field prepend-icon="fa fa-envelope" label="Correo" v-model="datosRegistro.correo" clearable />
                             </v-col>
                         </v-row>
                        
                         <v-card-subtitle class="subtitle-2 font-weight-black"><strong>Información escolar</strong></v-card-subtitle>
                         <v-row>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-person_add" label="Institución" v-model="datosRegistro.institucion" clearable />
+                                <v-text-field prepend-icon="fa fa-university" label="Institución" v-model="datosRegistro.institucion" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-school" label="Carrera" v-model="datosRegistro.carrera" clearable />
+                                <v-text-field prepend-icon="fa fa-graduation-cap" label="Carrera" v-model="datosRegistro.carrera" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-select prepend-icon="mdi-class" label="Semestre" v-model="datosRegistro.semestre" :items="items"/>
+                                <v-select prepend-icon="fa fa-sort" label="Semestre" v-model="datosRegistro.semestre" :items="items"/>
                             </v-col>
                         </v-row>
                         <v-row>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field prepend-icon="mdi-account" label="Usuario" v-model="datosRegistro.usuario" clearable />
+                                <v-text-field prepend-icon="fa fa-user" label="Usuario" v-model="datosRegistro.usuario" clearable />
                             </v-col>
                             <v-col cols="12" sm="6" md="4" lg="4">
-                                <v-text-field  prepend-icon="mdi-lock" label="Contraseña" v-model="datosRegistro.psw" clearable />
+                                <v-text-field  prepend-icon="fa fa-lock" label="Contraseña" v-model="datosRegistro.psw" clearable />
                             </v-col>
                         </v-row>
                         <v-row>

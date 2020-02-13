@@ -19,6 +19,7 @@
                     </v-card-text>
                     <v-card-actions>
                         <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }">Ver catalogos</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }">See project</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
