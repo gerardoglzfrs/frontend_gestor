@@ -17,9 +17,9 @@
                          <v-row>
                             <v-col cols="12">
                                 <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="usuario.password" clearable
-                                    :append-icon="usuario.show ? 'fa fa-eye' : 'fa fa-eye-slash'"
-                                    :type="usuario.show ? 'text' : 'password'"
-                                    @click:append="usuario.show = !usuario.show"/>
+                                    :append-icon="show ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                    :type="show ? 'text' : 'password'"
+                                    @click:append="show = !show"/>
                             </v-col>
                         </v-row>
                         <v-row>
@@ -51,11 +51,11 @@ export default {
         isValid: true,
         rulesUser: [
             value => !!value || "Usuario requerido",
-            value => (value || '').length >= 8 || "El usuario debe de tener 8 caracteres" 
+            value => (value || '').length >= 2 || "El usuario debe de tener 8 caracteres" 
         ],
         rulesPsw: [
             value => !!value || "Contraseña requerida",
-            value => (value || '').length >= 8 || "La contraseña debe de tener un minimo de 8 caracteres" 
+            value => (value || '').length >= 2 || "La contraseña debe de tener un minimo de 8 caracteres" 
         ],
         usuario: {
             usuario: '',
@@ -76,7 +76,8 @@ export default {
           EventBus.$emit("closeLogin");
         },
 
-        ...mapActions(["login"])
+        ...mapActions(["login"]),
+
     },
 
     mounted(){

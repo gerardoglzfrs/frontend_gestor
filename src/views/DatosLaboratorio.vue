@@ -11,6 +11,7 @@
 <script>
 import Navbar from '../components/Navbar'
 import tablasProyectos from '../components/Laboratorio/tablasProyectos'
+import { mapMutations } from "vuex";
 
 export default {
     name: "DatosLaboratorio",
@@ -22,6 +23,8 @@ export default {
     }),
 
     methods: {
+        ...mapMutations(['guardarUsuarioLog']),
+
         async getdataLab(){
             try {
                 const datalab = await this.$apollo.query({
@@ -45,6 +48,7 @@ export default {
         } 
     },
     created(){
+        this.guardarUsuarioLog();
         this.getdataLab();
         this.name = this.$route.params.nameLab
     },

@@ -18,9 +18,9 @@
                         <div><strong>Total de proyectos: </strong>20</div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }">alu</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }">adm</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name: 'Labs' }">lab</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'Labs' }" v-else-if="usuarioLogeado.tipUsuario === '1'">Ver proyectos</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-else>Ver catalogos</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
     name: "CardsLaboratorios",
     data: () => ({
@@ -40,14 +42,13 @@ export default {
             {title: "Laboratorio de Software Libre Zacatecas", cantidad: "20"}, 
             {title: "Benemérita Universidad Autónoma de Puebla", cantidad: "20"},
             {title: "Centro de Enseñanza Técnica y Superior, Universidad Baja California",cantidad: "20"},
-       
         ]
     }),
 
-    methods: {
-        DataLab(lab){
-            console.log(lab);
-        }
-    }
+    computed: {
+        ...mapState(['usuarioLogeado'])
+    },
+
+   
 }
 </script>

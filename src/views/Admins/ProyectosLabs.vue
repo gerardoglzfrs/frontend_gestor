@@ -16,6 +16,7 @@
 <script>
 import navAdmin from '@/components/navegacion/navAdmin'
 import Nuevos from '@/components/Proyectos/Nuevos'
+import { mapMutations } from "vuex";
 
 export default {
     name: 'ProyectosLabs',
@@ -24,5 +25,13 @@ export default {
     data: () => ({
         options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados']
     }),
+
+    mounted:{
+        ...mapMutations(['guardarUsuarioLog'])
+    },
+
+    created(){
+        this.guardarUsuarioLog()
+    }
 }
 </script>

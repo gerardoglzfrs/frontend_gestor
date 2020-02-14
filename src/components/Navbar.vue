@@ -1,5 +1,6 @@
 <template>
     <div>
+        <v-snackbar color="red" v-model="msjError" top :timeout="4000"><p class="text-center">¡{{ mensajeErrorLogin }}!</p></v-snackbar>
         <!-- Navbar para logeo -->
         <v-toolbar color="primary" dark> 
           <v-toolbar-title><v-img src="@/assets/logo.png"></v-img></v-toolbar-title>
@@ -18,7 +19,9 @@ export default {
   name: 'Navbar',
   components: {Login},
   data: () => ({
-    abrirLogin: false
+    abrirLogin: false,
+    mensajeErrorLogin: "",
+    msjError: false
   }),
   methods: {
     open(){
@@ -28,6 +31,17 @@ export default {
   mounted(){
     EventBus.$on("closeLogin",() => {
       this.abrirLogin = false;
+    });
+
+    EventBus.$on("cerrarLogin", () =>{
+      setTimeout(() => {
+        this.abrirLogin = false;
+      },3000)
+    });
+
+    EventBus.$on("errorLogin", (msj) => {
+      this.mensajeErrorLogin = msj  
+      this.msjError = true
     });
   }
 }
