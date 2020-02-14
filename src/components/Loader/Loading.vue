@@ -16,12 +16,12 @@ import { EventBus } from '../../EventBus'
 
 export default {
     props: ["openLoading"],
-    
-    mounted(){
-        setTimeout(()=>{
-            EventBus.$emit("closeLoader");
-        },2000);
-    }   
+    watch:{
+        openLoading(val){
+            if(!val) return
+             setTimeout(() => EventBus.$emit("closeLoader"), 2000)
+        }
+    }
 }
 </script>
 

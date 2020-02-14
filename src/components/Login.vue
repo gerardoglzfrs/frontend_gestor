@@ -60,8 +60,8 @@ export default {
         usuario: {
             usuario: '',
             password: '',
-            show: false
-        }
+        },
+        show: false
     }),
 
     methods: {
@@ -72,7 +72,8 @@ export default {
         
         closeModalLogin(){
             this.$refs.formLogin.reset();
-            EventBus.$emit("closeLogin");
+        //   Existe un error en esta parte
+          EventBus.$emit("closeLogin");
         },
 
         ...mapActions(["login"])

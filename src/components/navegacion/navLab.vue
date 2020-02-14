@@ -9,7 +9,7 @@
                     <v-icon>fa fa-plus</v-icon>
                 </v-btn>
             </template>
-            <span>Ver información</span>
+            <span>Nuevo proyecto</span>
         </v-tooltip>
         <v-tooltip bottom>
             <template v-slot:activator="{on}">
@@ -32,6 +32,8 @@
 
 <script>
 export default {
+    name: "navLab"
+    
 
 }
 </script>

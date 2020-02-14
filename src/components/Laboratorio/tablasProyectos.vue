@@ -68,7 +68,7 @@ export default {
         ],
         loading: true,
         abrirLogin: false,
-        open: false
+        open: null
     }),
     methods: {
         solicitarProyecto(proyecto){

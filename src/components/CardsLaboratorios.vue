@@ -18,8 +18,9 @@
                         <div><strong>Total de proyectos: </strong>20</div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }">Ver catalogos</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }">See project</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }">alu</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }">adm</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'Labs' }">lab</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>
