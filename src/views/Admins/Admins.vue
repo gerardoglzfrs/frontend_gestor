@@ -2,7 +2,6 @@
     <div>
         <navAdmin />
         <CardsLaboratorios />
-        
     </div>
 </template>
 

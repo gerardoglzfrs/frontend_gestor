@@ -21,6 +21,7 @@
                         <v-btn text color="primary accent-4" :to="{ name:'ProyectosLabs' }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos</v-btn>
                         <v-btn text color="primary accent-4" :to="{ name: 'Labs' }" v-else-if="usuarioLogeado.tipUsuario === '1'">Ver proyectos</v-btn>
                         <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-else>Ver catalogos</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name:'Metodologia'}">metodologia</v-btn>
                     </v-card-actions>
                 </v-card>
             </v-col>

@@ -11,22 +11,22 @@
                     <v-card-text>
                         <v-row>
                             <v-col cols="12">
-                                <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="usuario.usuario" clearable />
+                                <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="user.usuario" clearable />
                             </v-col>
                         </v-row>
                          <v-row>
                             <v-col cols="12">
-                                <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="usuario.password" clearable
+                                <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="user.password" clearable
                                     :append-icon="show ? 'fa fa-eye' : 'fa fa-eye-slash'"
                                     :type="show ? 'text' : 'password'"
                                     @click:append="show = !show"/>
                             </v-col>
                         </v-row>
                         <v-row>
-                            <v-btn block :disabled="!isValid" color="success" @click="login(usuario)" rounded>Ingresar</v-btn>
+                            <v-btn block :disabled="!isValid" color="success" @click="login(user)" rounded>Ingresar</v-btn>
                         </v-row>
                         <div class="text-center my-2">
-                            <span>¿No tienes cuenta?</span><a @click="openModalStudent()"> Regístrate ahora</a>
+                            <span>¿No tienes cuenta?</span><a @click="openModalStudent"> Regístrate ahora</a>
                             <Registro :openModelStudent="openFormStudent"/>
                         </div>
                     </v-card-text>
@@ -57,7 +57,7 @@ export default {
             value => !!value || "Contraseña requerida",
             value => (value || '').length >= 2 || "La contraseña debe de tener un minimo de 8 caracteres" 
         ],
-        usuario: {
+        user: {
             usuario: '',
             password: '',
         },
@@ -72,8 +72,7 @@ export default {
         
         closeModalLogin(){
             this.$refs.formLogin.reset();
-        //   Existe un error en esta parte
-          EventBus.$emit("closeLogin");
+            EventBus.$emit("closeLogin");
         },
 
         ...mapActions(["login"]),
@@ -91,6 +90,14 @@ export default {
         EventBus.$on('closeModalStudent', ()=>{
             this.openFormStudent = false;    
         });
+
+        EventBus.$on('cerrarRegistro',(msj) => {
+            setTimeout(() => {
+                this.openFormStudent = false;
+                EventBus.$emit('registrado',(msj));
+            },3000)
+        });
+
     }
 
 }

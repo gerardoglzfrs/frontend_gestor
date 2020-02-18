@@ -6,7 +6,7 @@
                     <v-spacer />
                     <v-text-field prepend-icon="fa fa-search" label="Buscar proyecto por nombre" v-model="filtro"></v-text-field>
                 </v-card-title>
-                 <v-data-table :headers="headers" 
+                <v-data-table :headers="headers" 
                 :search="filtro" 
                 no-data-text="No existen proyectos disponibles" 
                 :loading="loading" 

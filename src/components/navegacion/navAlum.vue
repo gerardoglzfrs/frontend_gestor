@@ -1,6 +1,8 @@
 <template>
     <v-toolbar color="primary" dark>
-        <v-toolbar-title><v-img src="@/assets/logo.png"></v-img></v-toolbar-title>
+        <v-toolbar-items>
+            <v-img src="@/assets/logo.png" />
+        </v-toolbar-items>
         <v-spacer />
         <v-toolbar-title>Gerardo González Flores</v-toolbar-title>
         <v-tooltip bottom>
