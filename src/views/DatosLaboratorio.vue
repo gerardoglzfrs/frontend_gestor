@@ -1,6 +1,10 @@
 <template>
-  <div>
-      <Navbar />
+    <div>
+        <Navbar v-if="usuarioLogeado.tipUsuario === '' "/>
+        <navAdmin v-else-if="usuarioLogeado.tipUsuario === '0'"/>
+        <navLab  v-else-if="usuarioLogeado.tipUsuario === '1'"/>
+        <navAlum  v-else-if="usuarioLogeado.tipUsuario === '2'"/>
+
       <v-container>
         <h1 class="title">{{ name }}</h1>
         <tablasProyectos />
@@ -10,17 +14,24 @@
 
 <script>
 import Navbar from '../components/Navbar'
+import navAlum from '@/components/navegacion/navAlum'
+import navAdmin from '@/components/navegacion/navAdmin'
+import navLab from '@/components/navegacion/navLab'
 import tablasProyectos from '../components/Laboratorio/tablasProyectos'
-import { mapMutations } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default {
     name: "DatosLaboratorio",
-    components: {Navbar, tablasProyectos},
+    components: { Navbar, tablasProyectos, navAdmin, navAlum, navLab  },
     
     data: () => ({    
         name: "",
         direccion:"", 
     }),
+
+    computed: {
+        ...mapState(["usuarioLogeado"])
+    },
 
     methods: {
         ...mapMutations(['guardarUsuarioLog']),

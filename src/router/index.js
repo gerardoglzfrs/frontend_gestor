@@ -33,7 +33,7 @@ const routes = [
     path: '/metodologia',
     name: 'Metodologia',
     component: () => import('../components/Proyectos/Metodologia')
-  }  
+  }
 ]
 
 const router = new VueRouter({

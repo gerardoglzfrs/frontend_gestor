@@ -27,12 +27,12 @@
                         </v-row>
                         <div class="text-center my-2">
                             <span>¿No tienes cuenta?</span><a @click="openModalStudent"> Regístrate ahora</a>
-                            <Registro :openModelStudent="openFormStudent"/>
                         </div>
                     </v-card-text>
                 </v-card>
             </v-form>
         </v-dialog>
+         <Registro :openModelStudent="openFormStudent"/>
     </div>
 </template>
 
@@ -43,7 +43,7 @@ import { mapActions } from 'vuex'
 
 export default {
     props: ['openModel'],
-    name: 'login',
+    name: 'Login',
     components: {Registro},
 
     data: () => ({
@@ -67,7 +67,7 @@ export default {
     methods: {
         openModalStudent(){
             this.openFormStudent = true;
-            EventBus.$emit("closeLogin");
+            //EventBus.$emit("closeLogin");
         },
         
         closeModalLogin(){
@@ -91,13 +91,9 @@ export default {
             this.openFormStudent = false;    
         });
 
-        EventBus.$on('cerrarRegistro',(msj) => {
-            setTimeout(() => {
-                this.openFormStudent = false;
-                EventBus.$emit('registrado',(msj));
-            },3000)
-        });
-
+        EventBus.$on('cerrarRegistro', ()=>{
+            this.openFormStudent = false;
+        })
     }
 
 }

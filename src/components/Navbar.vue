@@ -1,7 +1,6 @@
 <template>
     <div>
         <v-snackbar color="red" v-model="msjError" top :timeout="4000"><p class="text-center">¡{{ mensajeErrorLogin }}!</p></v-snackbar>
-        <v-snackbar color="green" v-model="msjsuccess" top :timeout="4000"><p class="text-center">¡{{ registrado }}!</p></v-snackbar>
         <!-- Navbar para logeo -->
         <v-toolbar color="primary" dark> 
           <v-toolbar-items>
@@ -26,8 +25,6 @@ export default {
     abrirLogin: false,
     mensajeErrorLogin: "",
     msjError: false,
-    registrado: "",
-    msjsuccess: false,
   }),
  
   methods: {
@@ -52,10 +49,14 @@ export default {
       this.msjError = true
     });
 
-    EventBus.$on("registrado", (msj) => {
-      this.registrado = msj  
-      this.msjsuccess = true
-    });
+    // EventBus.$on("registrado", (msj) => {
+    //   this.registrado = msj  
+    //   this.msjsuccess = true
+    // });
+
+    EventBus.$on("regresarLogin", ()=>{
+      this.abrirLogin = true;
+    })
 
 
   }

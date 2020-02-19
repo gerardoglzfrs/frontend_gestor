@@ -14,14 +14,14 @@
                 no-results-text="Proyecto no encontrado"
                 :footer-props="{itemsPerPageText:'Proyectos por página'}"
                 :items="proyectos"> 
-                    <template v-slot:item.acciones="{item}">
+                    <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
                         <v-tooltip bottom>
                             <template v-slot:activator="{on}">
                                 <v-btn text icon color="primary" v-on="on">
                                   <v-icon>fa fa-info</v-icon>
                                 </v-btn>
                             </template>
-                            <span>Ver información</span>
+                            <span>Ver información alumno</span>
                         </v-tooltip>
                         <v-tooltip bottom>
                             <template v-slot:activator="{on}">
@@ -32,6 +32,45 @@
                             <span>Solicitar proyecto</span>
                         </v-tooltip>
                     </template>
+
+                      <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '0'">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{on}">
+                                <v-btn text icon color="primary" v-on="on">
+                                  <v-icon>fa fa-info</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Ver información admin</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{on}">
+                                <v-btn text icon color="green" v-on="on" @click="solicitarProyecto(item)">
+                                  <v-icon>fa fa-check-circle</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Solicitar proyecto</span>
+                        </v-tooltip>
+                    </template>
+
+                      <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '1'">
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{on}">
+                                <v-btn text icon color="primary" v-on="on">
+                                  <v-icon>fa fa-info</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Ver información lab</span>
+                        </v-tooltip>
+                        <v-tooltip bottom>
+                            <template v-slot:activator="{on}">
+                                <v-btn text icon color="green" v-on="on" @click="solicitarProyecto(item)">
+                                  <v-icon>fa fa-check-circle</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Solicitar proyecto</span>
+                        </v-tooltip>
+                    </template>
+
                 </v-data-table>
             </v-card>
         </v-row>
@@ -45,6 +84,7 @@
 import Login from '@/components/Login'
 import Loading from '@/components/Loader/Loading'
 import { EventBus } from '../../EventBus'
+import { mapState } from "vuex";
 
 export default {
     components: {Login, Loading},
@@ -70,6 +110,11 @@ export default {
         abrirLogin: false,
         open: null
     }),
+
+    computed:{
+        ...mapState(["usuarioLogeado"])
+    },
+
     methods: {
         solicitarProyecto(proyecto){
             if (sessionStorage.getItem("token")===null) {

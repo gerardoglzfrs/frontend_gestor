@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 import gql from 'graphql-tag'
 import { apolloClient } from '../graphql/apollo'
 import { VueEasyJwt } from 'vue-easy-jwt'
-import { EventBus } from "../EventBus";
+import { EventBus } from "../EventBus"
+import router from "../router/index"
 
 const jwt = new VueEasyJwt()
 Vue.use(Vuex)
@@ -13,7 +14,8 @@ export default new Vuex.Store({
   state: {
     usuarioLogeado: {
       tipUsuario: "",
-      nom_usuario: ""
+      nom_usuario: "",
+      nombre: ""
     }
   },
 
@@ -23,12 +25,13 @@ export default new Vuex.Store({
       if (tokenDec) {
         state.usuarioLogeado.tipUsuario = tokenDec.typeUser
         state.usuarioLogeado.nom_usuario = tokenDec.usuario
+        state.usuarioLogeado.nombre = tokenDec.nombre
       }
     }
   },
   
   actions: {
-    async login({ commit },user){
+    async login({ commit, state },user){
       try {
         const {data} = await apolloClient.mutate({
           mutation: gql`
@@ -44,7 +47,7 @@ export default new Vuex.Store({
         }) 
         
         const mensajeError = data.login;
-        
+       
         switch (mensajeError) {
           case "Contraseña incorrecta":
             EventBus.$emit("errorLogin", mensajeError)
@@ -60,7 +63,7 @@ export default new Vuex.Store({
             EventBus.$emit("cerrarLogin")
             break;
         }
-       
+
       } catch (error) {
         
       }
@@ -82,7 +85,7 @@ export default new Vuex.Store({
             correo: datosAlumno.correo,
             telefono: datosAlumno.telefono,
             institucion: datosAlumno.institucion,
-            carrera: datosAlumno.carrera,
+            carrera: datosAlumno.carrera, 
             semestre_cursado: datosAlumno.semestre,
             domicilio: datosAlumno.domicilio,
             usuario: datosAlumno.usuario,
@@ -93,14 +96,34 @@ export default new Vuex.Store({
         const msj = data.agregarAlumno;
 
         if(msj === "Usuario registrado"){
-          EventBus.$emit("cerrarRegistro", msj);
+          EventBus.$emit("successRegistro", msj);
+        }else{
+          EventBus.$emit("errorRegistro", msj);
         }
 
       } catch (error) {
         console.log(datosAlumno)
       }
-    }
+    },
 
+    //Logout
+    async Logout(){
+      try {
+        await apolloClient.mutate({
+          mutation: gql`
+            mutation{
+              logOut
+            }
+          `
+        })
+        localStorage.removeItem("token")
+        // router.push({ name: 'ListaLaboratorios' })
+        location.reload();
+      } catch (error) {
+        
+      }
+    }
+    
   },
   modules: {
   }
