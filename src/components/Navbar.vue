@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-snackbar color="red" v-model="msjError" top :timeout="4000"><p class="text-center">¡{{ mensajeErrorLogin }}!</p></v-snackbar>
+        <v-snackbar color="red" v-model="msjError" top :timeout="4000">¡{{ mensajeErrorLogin }}! <v-btn color="white" text @click="msjError=false">Cerrar</v-btn></v-snackbar>
         <!-- Navbar para logeo -->
         <v-toolbar color="primary" dark> 
           <v-toolbar-items>
@@ -10,21 +10,24 @@
           <v-btn text @click="open"><v-icon>mdi-user</v-icon> Iniciar sesion</v-btn>
         </v-toolbar> 
         <Login :openModel="abrirLogin" />  
+        <Registro :openModelStudent="openFormStudent"/>
     </div>
 </template>
 
 <script>
 import Login from '@/components/Login.vue'
 import { EventBus } from '../EventBus'
+import Registro from '@/components/Alumnos/Registro.vue'
 
 export default {
   name: 'Navbar',
-  components: {Login},
+  components: {Login, Registro},
   
   data: () => ({
     abrirLogin: false,
     mensajeErrorLogin: "",
     msjError: false,
+    openFormStudent: false
   }),
  
   methods: {
@@ -48,6 +51,18 @@ export default {
       this.mensajeErrorLogin = msj  
       this.msjError = true
     });
+    
+    EventBus.$on('closeModalStudent', ()=>{
+      this.openFormStudent = false;    
+    });
+
+    EventBus.$on("openModalStudent", () => {
+      this.openFormStudent = true;
+    })
+
+    EventBus.$on('cerrarRegistro', ()=>{
+      this.openFormStudent = false;
+    })
 
     // EventBus.$on("registrado", (msj) => {
     //   this.registrado = msj  

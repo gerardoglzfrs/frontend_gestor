@@ -20,6 +20,7 @@ export default new Vuex.Store({
   },
 
   mutations: {
+    // Guardar token de usuarios
     guardarUsuarioLog(state){
       const tokenDec =  jwt.decodeToken(localStorage.getItem("token"))
       if (tokenDec) {
@@ -31,6 +32,7 @@ export default new Vuex.Store({
   },
   
   actions: {
+    // Login de usuarios
     async login({ commit, state },user){
       try {
         const {data} = await apolloClient.mutate({
@@ -69,6 +71,7 @@ export default new Vuex.Store({
       }
     },
 
+    // Registro de Alumnos 
     async agregarAlumno({  }, datosAlumno){
       try {
         const {data} = await apolloClient.mutate({
@@ -94,7 +97,7 @@ export default new Vuex.Store({
         })
 
         const msj = data.agregarAlumno;
-
+        console.log(msj)
         if(msj === "Usuario registrado"){
           EventBus.$emit("successRegistro", msj);
         }else{
@@ -121,6 +124,35 @@ export default new Vuex.Store({
         location.reload();
       } catch (error) {
         
+      }
+    },
+
+    // Registro de proyectos por laboratorio
+    async regProyecto({}, datosProyecto){
+      try {
+        const {data} = await apolloClient.mutate({
+          mutation: gql`
+            mutation($proyecto: String!, $objetivo: String!, $alcances: String!, $metas: String!)
+            {
+              agregarProyecto(proyecto: $proyecto, objetivo: $objetivo, alcances: $alcances, metas: $metas)
+            }
+          `,
+          variables: {
+            proyecto: datosProyecto.nombre,
+            objetivo: datosProyecto.objetivo,
+            alcances: datosProyecto.alcances,
+            metas: datosProyecto.metas
+          }
+        })
+
+        const msj = data.agregarProyecto
+
+        if (msj === "Proyecto registrado") {
+          EventBus.$emit("proyectoRegistrado", msj)  
+        }
+        
+      } catch (error) {
+        console.log(error)
       }
     }
     

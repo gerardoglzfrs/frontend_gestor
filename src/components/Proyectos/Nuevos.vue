@@ -49,7 +49,7 @@
 <script>
 
 export default {
-    name: 'NuevosProyecto',
+    name: 'Nuevos',
 
     data: () => ({
         headers: [

@@ -18,10 +18,10 @@
                         <div><strong>Total de proyectos: </strong>20</div>
                     </v-card-text>
                     <v-card-actions>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos admin</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-else-if="usuarioLogeado.tipUsuario === '1'">Ver proyectos lab</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-else-if="usuarioLogeado.tipUsuario === '2'">Ver proyectos al</v-btn>
-                        <v-btn text color="primary accent-4" :to="{ name: 'DatosLaboratorios', params:{nameLab:item.title} }" v-else>Ver catalogos</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.title} }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos admin</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.title} }" v-else-if="usuarioLogeado.tipUsuario === '1'">Ver proyectos lab</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.title} }" v-else-if="usuarioLogeado.tipUsuario === '2'">Ver proyectos al</v-btn>
+                        <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.title} }" v-else>Ver catalogos</v-btn>
                         <v-btn text color="primary accent-4" :to="{ name:'Metodologia'}">metodologia</v-btn>
                     </v-card-actions>
                 </v-card>

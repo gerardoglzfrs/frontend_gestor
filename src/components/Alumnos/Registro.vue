@@ -1,7 +1,7 @@
 <template>
     <div>
-        <v-snackbar color="green" v-model="msjsuccess" top><p class="text-center">¡Registrado!</p></v-snackbar>
-        <v-snackbar color="green" v-model="msjerror" top><p class="text-center">¡{{ msjErrorRegistro }}!</p></v-snackbar>
+        <v-snackbar color="green" v-model="msjsuccess" top>¡Registrado! <v-btn color="white" text @click="msjsuccess=false">Cerrar</v-btn></v-snackbar>
+        <v-snackbar color="red" v-model="msjerror" top>¡{{ msjErrorRegistro }}! <v-btn color="white" text @click="msjerror=false">Cerrar</v-btn></v-snackbar>
 
         <v-dialog v-model="openModelStudent" max-width="800" persistent>
             <v-form ref="formStudent" v-model="esValido">
@@ -30,7 +30,7 @@
                                     <v-text-field :rules="domicilioAlumno" prepend-icon="fa fa-map-marker" label="Domicilio" v-model="datosAlumno.domicilio" clearable dense />
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4" lg="4">
-                                    <v-text-field :rules="telefonoAlumno" type="number" prepend-icon="fa fa-phone" label="Numero telefono" v-model="datosAlumno.telefono" clearable dense />
+                                    <v-text-field v-mask="mask" :rules="telefonoAlumno" type="text" prepend-icon="fa fa-phone" label="Numero telefono" v-model="datosAlumno.telefono" clearable dense />
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4" lg="4">
                                     <v-text-field :rules="correoAlumno" prepend-icon="fa fa-envelope" label="Correo" v-model="datosAlumno.correo" clearable dense />
@@ -45,7 +45,7 @@
                                     <v-text-field :rules="carreraAlumno" prepend-icon="fa fa-graduation-cap" label="Carrera" v-model="datosAlumno.carrera" clearable dense/>
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4" lg="4">
-                                    <v-text-field dense :rules="semestreAlumno" required v-model="datosAlumno.semestre" clearable prepend-icon="fa fa-sort" type="number" label="Semestre" min="1" max="13"></v-text-field>
+                                    <v-text-field v-mask="mask1" dense :rules="semestreAlumno" required v-model="datosAlumno.semestre" clearable prepend-icon="fa fa-sort" type="text" label="Semestre" min="1" max="13"></v-text-field>
                                 </v-col>
                             </v-row>
                             <v-row>
@@ -83,15 +83,27 @@
 <script>
 import {EventBus} from '../../EventBus'
 import { mapActions } from 'vuex'
+import { mask, mask1 } from "vue-the-mask"
 
 export default {
     name: 'RegistroAlumno',
     props: ['openModelStudent'],
 
+    directives:{
+        mask,
+        mask1
+    },
+
     data: () => ({
+        mask: '(###)-###-####',
+        mask1: '##',
         show: false,
         show1: false,
         regresarLogin: false,
+        pswConfirm: "",
+        msjsuccess: false,
+        msjErrorRegistro: "",
+        msjerror: false,
         items: ['1 Semestre','2 Semestre','3 Semestre','4 Semestre','5 Semestre','6 Semestre','7 Semestre','8 Semestre','9 Semestre','10 Semestre','11 Semestre','12 Semestre'],
         esValido: true,
         datosAlumno: {
@@ -107,10 +119,6 @@ export default {
             usuario: "",
             psw: "",
         },
-        pswConfirm: "",
-        msjsuccess: false,
-        msjErrorRegistro: "",
-        msjerror: false,
         nomAlumno: [
             value => !!value || "El nombre es requerido",
             value => {
@@ -136,8 +144,8 @@ export default {
             value => !!value || "El domicilio es requerido",
         ],
         telefonoAlumno: [
-             value => !!value || "El número de teléfono es requerido",
-             value => (value || "").length === 10 || "Solo se permiten 10 digitos"
+            value => !!value || "El número de teléfono es requerido",
+            value => (value || "").length === 14 || "Solo se permiten 10 digitos"
         ],
         correoAlumno: [
             value => !!value || "El correo es requerido",
@@ -163,7 +171,7 @@ export default {
         ],
         semestreAlumno: [
             value => !!value || "El semestre es requerido",
-            value => (value || "").length < 3 || "Semestre incorrecto"
+            value => (value || "") <= 12 || "Semestre incorrecto"
         ],
         usuarioAlumno: [
             value => !!value || "El usuario es requerido",
@@ -185,8 +193,11 @@ export default {
 
     methods: {
         closeModalStudent(){
-            this.$refs.formStudent.reset();
             EventBus.$emit('closeModalStudent');
+            try {
+                this.$refs.formStudent.reset();
+            } catch (error) {
+            }
         },
 
         abrirLogin(){
@@ -210,6 +221,10 @@ export default {
             setTimeout(() => {
                 EventBus.$emit('cerrarRegistro',(msj));
                 this.msjsuccess = false;
+                try {
+                    this.$refs.formStudent.reset();
+                } catch (error) {
+            }
             },3000)
         });
 

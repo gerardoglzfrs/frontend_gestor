@@ -21,7 +21,7 @@ import tablasProyectos from '../components/Laboratorio/tablasProyectos'
 import { mapMutations, mapState } from "vuex";
 
 export default {
-    name: "DatosLaboratorio",
+    name: "ProyectoLaboratorios",
     components: { Navbar, tablasProyectos, navAdmin, navAlum, navLab  },
     
     data: () => ({    

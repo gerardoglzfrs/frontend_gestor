@@ -9,22 +9,24 @@
                         <v-btn icon @click="closeModalLogin()"><v-icon>fa fa-times</v-icon></v-btn>
                     </v-toolbar>
                     <v-card-text>
-                        <v-row>
-                            <v-col cols="12">
-                                <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="user.usuario" clearable />
-                            </v-col>
-                        </v-row>
-                         <v-row>
-                            <v-col cols="12">
-                                <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="user.password" clearable
-                                    :append-icon="show ? 'fa fa-eye' : 'fa fa-eye-slash'"
-                                    :type="show ? 'text' : 'password'"
-                                    @click:append="show = !show"/>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-btn block :disabled="!isValid" color="success" @click="login(user)" rounded>Ingresar</v-btn>
-                        </v-row>
+                        <v-container fluid>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field :rules="rulesUser" prepend-icon="fas fa-user-circle" label="Usuario" v-model="user.usuario" clearable />
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12">
+                                    <v-text-field :rules="rulesPsw" prepend-icon="fas fa-lock" label="Contraseña" v-model="user.password" clearable
+                                        :append-icon="show ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                        :type="show ? 'text' : 'password'"
+                                        @click:append="show = !show"/>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-btn block :disabled="!isValid" color="success" @click="login(user)" rounded>Ingresar</v-btn>
+                            </v-row>
+                        </v-container>
                         <div class="text-center my-2">
                             <span>¿No tienes cuenta?</span><a @click="openModalStudent"> Regístrate ahora</a>
                         </div>
@@ -32,19 +34,19 @@
                 </v-card>
             </v-form>
         </v-dialog>
-         <Registro :openModelStudent="openFormStudent"/>
+         <!-- <Registro :openModelStudent="openFormStudent"/> -->
     </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
-import Registro from '@/components/Alumnos/Registro.vue'
+// import Registro from '@/components/Alumnos/Registro.vue'
 import { mapActions } from 'vuex'
 
 export default {
     props: ['openModel'],
     name: 'Login',
-    components: {Registro},
+    // components: {Registro},
 
     data: () => ({
         openFormStudent: false,
@@ -66,13 +68,19 @@ export default {
 
     methods: {
         openModalStudent(){
-            this.openFormStudent = true;
+            // this.openFormStudent = true;
+            EventBus.$emit("openModalStudent")
+            //
             //EventBus.$emit("closeLogin");
         },
         
         closeModalLogin(){
-            this.$refs.formLogin.reset();
             EventBus.$emit("closeLogin");
+            try {
+                this.$refs.formLogin.reset();
+            } catch (error) {
+            }
+
         },
 
         ...mapActions(["login"]),
@@ -86,14 +94,10 @@ export default {
                 this.closeModalLogin();
             }
         });
-        
-        EventBus.$on('closeModalStudent', ()=>{
-            this.openFormStudent = false;    
-        });
 
-        EventBus.$on('cerrarRegistro', ()=>{
-            this.openFormStudent = false;
-        })
+        // EventBus.$on('cerrarRegistro', ()=>{
+        //     this.openFormStudent = false;
+        // })
     }
 
 }

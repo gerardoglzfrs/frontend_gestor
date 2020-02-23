@@ -11,8 +11,8 @@ const routes = [
   },
   {
     path: '/:nameLab',
-    name: 'DatosLaboratorios',
-    component: () => import('../views/DatosLaboratorio.vue')
+    name: 'ProyectosLaboratorios',
+    component: () => import('../views/ProyectosLaboratorios.vue')
   },
   {
     path: '/admins',
