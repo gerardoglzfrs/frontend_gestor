@@ -16,7 +16,7 @@
             </v-tooltip>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">
-                    <v-btn text icon color="" v-on="on" >
+                    <v-btn text icon color="" v-on="on" :to="{ name: 'Proyectos'}">
                         <v-icon>fa fa-tasks</v-icon>
                     </v-btn>
                 </template>

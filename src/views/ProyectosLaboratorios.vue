@@ -4,9 +4,10 @@
         <navAdmin v-else-if="usuarioLogeado.tipUsuario === '0'"/>
         <navLab  v-else-if="usuarioLogeado.tipUsuario === '1'"/>
         <navAlum  v-else-if="usuarioLogeado.tipUsuario === '2'"/>
-
+        
       <v-container>
-        <h1 class="title">{{ name }}</h1>
+        <p class="display-1 text-center">{{ name }}</p>
+        <hr>
         <tablasProyectos />
       </v-container>
   </div>
@@ -17,7 +18,7 @@ import Navbar from '../components/Navbar'
 import navAlum from '@/components/navegacion/navAlum'
 import navAdmin from '@/components/navegacion/navAdmin'
 import navLab from '@/components/navegacion/navLab'
-import tablasProyectos from '../components/Laboratorio/tablasProyectos'
+import tablasProyectos from '../components/tablasProyectos'
 import { mapMutations, mapState } from "vuex";
 
 export default {

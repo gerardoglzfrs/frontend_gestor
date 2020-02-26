@@ -29,10 +29,22 @@ const routes = [
     name: 'Labs',
     component: () => import('../views/Laboratorio/Labs')
   },
+  // Esta ruta es de prueba
   {
     path: '/metodologia',
     name: 'Metodologia',
     component: () => import('../components/Proyectos/Metodologia')
+  },
+  {
+    path: '/Proyectos',
+    name: 'Proyectos',
+    component: () => import('../views/Laboratorio/Proyectos')
+  },
+  // Esta ruta es de prueba
+  {
+    path: '/Perfil',
+    name: 'Perfil',
+    component: () => import('../views/Alumnos/Perfil.vue')
   }
 ]
 

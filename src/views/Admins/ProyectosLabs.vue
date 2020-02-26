@@ -8,19 +8,19 @@
                 <v-select :items="options" outlined label="Seleccione la categoria"/>
             </v-col>
         </v-row>
-        <Nuevos />
+        <tablaProyectosLabs />
       </v-container>
     </div>
 </template>
 
 <script>
 import navAdmin from '@/components/navegacion/navAdmin'
-import Nuevos from '@/components/Proyectos/Nuevos'
+import tablaProyectosLabs from '@/components/Proyectos/tablaProyectosLabs'
 import { mapMutations } from "vuex";
 
 export default {
     name: 'ProyectosLabs',
-    components: { navAdmin, Nuevos },
+    components: { navAdmin, tablaProyectosLabs },
     
     data: () => ({
         options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados']

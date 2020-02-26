@@ -34,13 +34,11 @@
                 </v-card>
             </v-form>
         </v-dialog>
-         <!-- <Registro :openModelStudent="openFormStudent"/> -->
     </div>
 </template>
 
 <script>
 import { EventBus } from '../EventBus'
-// import Registro from '@/components/Alumnos/Registro.vue'
 import { mapActions } from 'vuex'
 
 export default {

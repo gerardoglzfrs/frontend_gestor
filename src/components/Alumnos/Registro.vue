@@ -30,7 +30,7 @@
                                     <v-text-field :rules="domicilioAlumno" prepend-icon="fa fa-map-marker" label="Domicilio" v-model="datosAlumno.domicilio" clearable dense />
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4" lg="4">
-                                    <v-text-field v-mask="mask" :rules="telefonoAlumno" type="text" prepend-icon="fa fa-phone" label="Numero telefono" v-model="datosAlumno.telefono" clearable dense />
+                                    <v-text-field v-mask="mask" :rules="telefonoAlumno" type="text" prepend-icon="fa fa-phone" label="Número telefono" v-model="datosAlumno.telefono" clearable dense />
                                 </v-col>
                                 <v-col cols="12" sm="6" md="4" lg="4">
                                     <v-text-field :rules="correoAlumno" prepend-icon="fa fa-envelope" label="Correo" v-model="datosAlumno.correo" clearable dense />
@@ -104,8 +104,8 @@ export default {
         msjsuccess: false,
         msjErrorRegistro: "",
         msjerror: false,
-        items: ['1 Semestre','2 Semestre','3 Semestre','4 Semestre','5 Semestre','6 Semestre','7 Semestre','8 Semestre','9 Semestre','10 Semestre','11 Semestre','12 Semestre'],
         esValido: true,
+        items: ['1 Semestre','2 Semestre','3 Semestre','4 Semestre','5 Semestre','6 Semestre','7 Semestre','8 Semestre','9 Semestre','10 Semestre','11 Semestre','12 Semestre'],
         datosAlumno: {
             nombre: "",
             apellidoP: "",

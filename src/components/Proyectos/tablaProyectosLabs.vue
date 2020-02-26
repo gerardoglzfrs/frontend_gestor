@@ -47,7 +47,6 @@
 </template>
 
 <script>
-
 export default {
     name: 'Nuevos',
 
@@ -63,7 +62,6 @@ export default {
         ],
         filtro: "",
         loading: true
-    })
-
+    }),
 }
 </script>

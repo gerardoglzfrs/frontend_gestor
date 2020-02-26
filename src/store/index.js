@@ -132,16 +132,18 @@ export default new Vuex.Store({
       try {
         const {data} = await apolloClient.mutate({
           mutation: gql`
-            mutation($proyecto: String!, $objetivo: String!, $alcances: String!, $metas: String!)
+            mutation($proyecto: String!, $alumnosRequeridos: String!, $objetivo: String!, $requerimientos: String!, $perfiles: String!, $habilidades: String!)
             {
-              agregarProyecto(proyecto: $proyecto, objetivo: $objetivo, alcances: $alcances, metas: $metas)
+              agregarProyecto(proyecto: $proyecto, numAlu: $alumnosRequeridos, objetivo: $objetivo, requerimientos: $requerimientos, perfiles: $perfiles, habilidades: $habilidades)
             }
           `,
           variables: {
             proyecto: datosProyecto.nombre,
+            alumnosRequeridos: datosProyecto.alumnosRequeridos,
             objetivo: datosProyecto.objetivo,
-            alcances: datosProyecto.alcances,
-            metas: datosProyecto.metas
+            requerimientos: datosProyecto.requerimientos,
+            perfiles: datosProyecto.perfiles,
+            habilidades: datosProyecto.habilidades
           }
         })
 
@@ -149,6 +151,8 @@ export default new Vuex.Store({
 
         if (msj === "Proyecto registrado") {
           EventBus.$emit("proyectoRegistrado", msj)  
+        }else{
+          EventBus.$emit("errorRegProyecto", msj)  
         }
         
       } catch (error) {

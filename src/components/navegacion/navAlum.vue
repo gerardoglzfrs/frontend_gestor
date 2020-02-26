@@ -7,7 +7,7 @@
         <v-toolbar-title>{{ usuarioLogeado.nombre }}</v-toolbar-title>
         <v-tooltip bottom>
             <template v-slot:activator="{on}">
-                <v-btn text icon color="" v-on="on">
+                <v-btn text icon color="" v-on="on" :to="{ name: 'Perfil'}">
                     <v-icon>fa fa-user</v-icon>
                 </v-btn>
             </template>
