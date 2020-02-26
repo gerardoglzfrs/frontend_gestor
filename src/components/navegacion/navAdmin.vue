@@ -57,6 +57,12 @@ export default {
         EventBus.$on("cerrarRegistroLab", () => {
             this.abrirRegistroLab = false;
         });
+
+        EventBus.$on("cerrarModelNuevoLaboratorio", ( ) => {
+            setTimeout(() => {
+                this.abrirRegistroLab = false;
+            },3000);
+        })
     }
 }
 </script>

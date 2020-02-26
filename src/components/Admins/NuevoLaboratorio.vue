@@ -15,18 +15,30 @@
                         <v-card-subtitle class="subtitle-2" front-weight-black style="padding: 5px;"><strong>Datos del laboratorio</strong></v-card-subtitle>
                         <v-container fluid>
                             <v-row>
-                                <v-col cols="12" sm="12" md="12" lg="12">
-                                    <v-file-input :rules="ruleslogo" @change="obtenerlogo($event)" accept="image/*" label="Logo de la institución" prepend-icon="fa fa-file-image" show-size chips></v-file-input>
-                                </v-col>
-                                <v-col cols="12" sm="6" md="4" lg="4">
+                                <v-col cols="12" sm="6" md="6" lg="6">
                                     <v-text-field :rules="nombre" prepend-icon="fa fa-id-card" label="Nombre del laboratorio" v-model="datosRegistro.nombre" clearable />
                                 </v-col>
-                                <v-col cols="12" sm="6" md="4" lg="4">
+                                <v-col cols="12" sm="6" md="6" lg="6">
+                                    <v-file-input :rules="ruleslogo" @change="obtenerlogo($event)" accept="image/*" label="Logo de la institución" prepend-icon="fa fa-file-image" show-size chips></v-file-input>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col cols="12" sm="4" md="4" lg="4">
                                     <v-text-field :rules="usuario" prepend-icon="fa fa-user" label="Usuario" v-model="datosRegistro.usuario" clearable />
                                 </v-col>
-                                <v-col cols="12" sm="6" md="4" lg="4">
-                                    <v-text-field :rules="contraseña" prepend-icon="fa fa-lock" label="Contraseña" v-model="datosRegistro.psw" clearable />
-                                </v-col>
+                                <v-col cols="12" sm="4" md="4" lg="4">
+                                    <v-text-field :rules="contraseña" prepend-icon="fa fa-lock" label="Contraseña" v-model="datosRegistro.psw" clearable 
+                                    :append-icon="show ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                    :type="show ? 'text' : 'password'"
+                                    @click:append="show = !show"/>
+                                </v-col> 
+                                <v-col cols="12" sm="4" md="4" lg="4">
+                                    <v-text-field :rules="confirmacionPsw" prepend-icon="fa fa-lock" label="Confirmar" v-model="pswConfirm" clearable 
+                                    :append-icon="show1 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+                                    :type="show1 ? 'text' : 'password'"
+                                    @click:append="show1 = !show1"
+                                    />
+                                </v-col>    
                             </v-row>
                         </v-container>
                             <v-row>
@@ -55,6 +67,7 @@ export default {
         msjSatisfactorio: "",
         show: false,
         show1: false,
+        pswConfirm: "",
         datosRegistro: {
             nombre: '',
             usuario: '',
@@ -73,10 +86,17 @@ export default {
         contraseña: [
             value => !!value || "El contraseña requerido"
         ],
-        
         isValid: true
 
     }),
+
+    computed:{
+        confirmacionPsw(){
+            return [
+                this.datosRegistro.psw === this.pswConfirm || "La contraseña no coincide"
+            ]
+        }
+    },
 
     methods: {  
         cerrarModal(){
@@ -102,7 +122,7 @@ export default {
                 //         Autorization: `Bearer ${localStorage.getItem("token")}`
                 //     }
                 // })
-                console.log("entro")
+                
                 const {data} = await this.$apollo.mutate({
                     mutation: gql`
                         mutation($nombre: String!, $usuario: String!, $psw: String!)
@@ -125,6 +145,7 @@ export default {
                         this.msjsuccess = false
                     }, 3000);
                     EventBus.$emit("actualizar");
+                    EventBus.$emit("cerrarModelNuevoLaboratorio");
                 } else {
                     this.msjErrorRegistro = msj;
                     this.msjerror = true;
@@ -132,8 +153,7 @@ export default {
                         this.msjerror = false;
                     },3000);
                 }
-
-                console.log("guardado");
+                
             } catch (error) {
                 
             }
