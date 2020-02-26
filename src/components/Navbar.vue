@@ -37,15 +37,16 @@ export default {
   },
  
   mounted(){
-    EventBus.$on("closeLogin",() => {
+    EventBus.$on("closeLoginTachita",() => {
       this.abrirLogin = false;
     });
 
-    EventBus.$on("cerrarLogin", () =>{
-      setTimeout(() => {
-        this.abrirLogin = false;
-      },3000)
-    });
+    // EventBus.$on("cerrarLoginNavbar", () =>{
+    //   console.log("hd");
+    //   setTimeout(() => {
+    //     this.abrirLogin = false;
+    //   },3000)
+    // });
 
     EventBus.$on("errorLogin", (msj) => {
       this.mensajeErrorLogin = msj  

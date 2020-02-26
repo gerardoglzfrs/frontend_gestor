@@ -55,7 +55,7 @@ export default {
         ],
         rulesPsw: [
             value => !!value || "Contraseña requerida",
-            value => (value || '').length >= 2 || "La contraseña debe de tener un minimo de 8 caracteres" 
+            value => (value || '').length >= 2 || "La contraseña debe de tener minimo 8 carateres"
         ],
         user: {
             usuario: '',
@@ -72,8 +72,9 @@ export default {
             //EventBus.$emit("closeLogin");
         },
         
-        closeModalLogin(){
-            EventBus.$emit("closeLogin");
+        closeModalLogin(){EventBus.$on("regresarLogin", ()=>{
+    }) 
+            EventBus.$emit("closeLoginTachita");
             try {
                 this.$refs.formLogin.reset();
             } catch (error) {

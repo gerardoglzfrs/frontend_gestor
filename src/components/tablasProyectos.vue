@@ -26,7 +26,7 @@
                         <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text icon color="primary" v-on="on">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
                                     <v-icon>fa fa-info</v-icon>
                                     </v-btn>
                                 </template>
@@ -42,10 +42,10 @@
                             </v-tooltip>
                         </template>
 
-                        <template v-slot:item.acciones="" v-else-if="usuarioLogeado.tipUsuario === '0'">
+                        <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '0'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text icon color="primary" v-on="on">
+                                    <v-btn text icon color="primary" v-on="on"  @click="verInfo(item)">
                                     <v-icon>fa fa-info</v-icon>
                                     </v-btn>
                                 </template>
@@ -53,10 +53,10 @@
                             </v-tooltip>
                         </template>
 
-                        <template v-slot:item.acciones="" v-else-if="usuarioLogeado.tipUsuario === '1'">
+                        <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '1'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text icon color="primary" v-on="on">
+                                    <v-btn text icon color="primary" v-on="on"  @click="verInfo(item)">
                                     <v-icon>fa fa-info</v-icon>
                                     </v-btn>
                                 </template>
@@ -70,38 +70,37 @@
 
         <Login :openModel="abrirLogin" />
         <Loading :openLoading="open" />
+        <informacion :visible="mostrarInfProyecto" :nomProyecto="nombreProyecto"/>
     </div>
 </template>
 
 <script>
 import Login from '@/components/Login'
 import Loading from '@/components/Loader/Loading'
+import informacion from '../components/Proyectos/informacion'
 import { EventBus } from '@/EventBus'
-import { mapState } from "vuex";
+import { mapState } from "vuex"
+import gql from 'graphql-tag'
 
 export default {
-    components: {Login, Loading},
+    components: {Login, Loading, informacion},
     name: 'tablasProyectos',
     
     data: () => ({
-        headers: [
-            {text: "Número", value: "numero", filerable: false},
-            {text: "Nombre", value: "nombre"},
-
-            {text: "Acciones", value: "acciones", filerable: false}
-        ],
+        nombreRuta: "",
         filtro: "",
-        proyectos: [
-            {numero: 1, nombre:"proyecto 1", estatus: "activo"},
-            {numero: 2, nombre:"proyecto 2", estatus: "activo"},
-            {numero: 3, nombre:"proyecto 3", estatus: "activo"},
-            {numero: 4, nombre:"proyecto 4", estatus: "activo"},
-            {numero: 5, nombre:"proyecto 5", estatus: "activo"},
-            {numero: 6, nombre:"proyecto 6", estatus: "inactivo"}
-        ],
         loading: true,
         abrirLogin: false,
         open: null,
+        mostrarInfProyecto: false,
+        nombreProyecto: "",
+        headers: [
+            {text: "Número", value: "numero", filerable: false},
+            {text: "nombre", value: "proyecto"},
+            {text: "estatus", value: "status", filerable: false},
+            {text: "Acciones", value: "acciones", filerable: false}
+        ],
+        proyectos: [],
         options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados']
     }),
 
@@ -110,22 +109,74 @@ export default {
     },
 
     methods: {
+        async obtenerProyectos(){
+            try {
+                const { data } = await this.$apollo.query({
+                    query:gql`
+                        query($nombre: String!){
+                            oneLab(nombre: $nombre){
+                                proyectos{
+                                    proyecto
+                                    status
+                                    objetivo
+                                }
+                            }
+                        }
+                    `,
+                    variables:{
+                        nombre: this.$route.params.nameLab
+                    }
+                }) 
+               
+                var i = 0;
+                for(let val of data.oneLab.proyectos){
+                    i=i+1;
+                    var numero="numero";
+                    var value = ""+i
+                    val[numero]=value;
+                }
+            
+                this.proyectos = data.oneLab.proyectos
+                this.loading = false
+                // console.log(data.oneLab.proyectos)
+                // this.Datos = data.allLabs;
+            } catch (error) {
+               console.log(error)
+            }
+        },
+
         solicitarProyecto(proyecto){
-            if (sessionStorage.getItem("token")==="") {
+            if (localStorage.getItem("token")===null) {
                 this.abrirLogin = true;
             }else{
                 this.open = true;
+                
             }
+        },
+
+        verInfo(proyecto){
+            this.nombreProyecto = proyecto.proyecto;
+            this.mostrarInfProyecto = true;   
         }
     },
     mounted(){
-        EventBus.$on("closeLogin",() => {
+        EventBus.$on("cerrarLoginTabla",() => {
+           setTimeout(()=>{
             this.abrirLogin = false;
+            },3000)
         });
 
         EventBus.$on("closeLoader",() => {
             this.open = false;
         });
+
+        EventBus.$on("closeLoginTachita",()=>{
+            this.abrirLogin =false;
+        });
+    },
+    created(){
+        this.obtenerProyectos();
+        this.name = this.$route.params.nameLab
     }
 
 }

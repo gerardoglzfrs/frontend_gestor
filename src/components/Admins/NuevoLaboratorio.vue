@@ -112,17 +112,7 @@ export default {
         },
         
         async guardarLaboratorio(){
-            try {
-                let formData = new FormData();
-                formData.append("logos",this.logo, "logo.jpg");
-
-                // await axios.post("/logos", formData, {
-                //     headers: {
-                //         "Content-Type":"multipart/form-data",
-                //         Autorization: `Bearer ${localStorage.getItem("token")}`
-                //     }
-                // })
-                
+            try {              
                 const {data} = await this.$apollo.mutate({
                     mutation: gql`
                         mutation($nombre: String!, $usuario: String!, $psw: String!)
@@ -136,6 +126,17 @@ export default {
                         psw: this.datosRegistro.psw
                     }
                 })
+                // Mandar el logo
+                let formData = new FormData();
+                formData.append("imagen",this.logo, `${this.datosRegistro.nombre}.jpg`);
+
+                await axios.post("/api/logos/upload", formData, {
+                    headers: {
+                        "Content-Type":"multipart/form-data",
+                        "labname":`${this.datosRegistro.nombre}`,
+                        Autorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                })
 
                 const msj = data.nuevoLab
                 if (msj == "Laboratorio registrado") {
@@ -144,8 +145,13 @@ export default {
                     setTimeout(()=>{
                         this.msjsuccess = false
                     }, 3000);
+                    
                     EventBus.$emit("actualizar");
                     EventBus.$emit("cerrarModelNuevoLaboratorio");
+                    try {
+                        this.$refs.formLaboratorio.reset();
+                    } catch (error) {
+                    }
                 } else {
                     this.msjErrorRegistro = msj;
                     this.msjerror = true;

@@ -7,13 +7,14 @@
             </p>
         <v-row>
             <v-col cols="12" md="4" lg="3" sm="6"  v-for="item of Datos" :key="item.nombre" class="my-2">
-                <v-card elevation="5">
+                <v-card elevation="5" >
                     <v-list-item> 
                         <v-list-item-content>
                             <v-list-item-title class="subtitle-2"><p>{{ item.nombre }}</p></v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img>
+                    <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img> -->
+                     <v-img :src="item.imagenLogo" height="200"></v-img>
                     <v-card-text class="text--primary">
                         <div><strong>Total de proyectos: </strong>20</div>
                     </v-card-text>
@@ -34,6 +35,8 @@
 import { mapState } from "vuex"
 import gql from 'graphql-tag'
 import { EventBus } from "../EventBus"
+import axios from "axios";
+
 
 export default {
     name: "CardsLaboratorios",
@@ -55,17 +58,34 @@ export default {
                         query{
                             allLabs{
                                 nombre
-                                logo
                             }
                         }
                     `,
                 })   
                 // console.log(data.allLabs)
                 this.Datos = data.allLabs;
-            } catch (error) {
                 
-            }
+                for(let i of this.Datos){
+                   
+                  const dataImage = await axios.get(`/api/logos/sendImg/${i.nombre}`,{
+                       responseType: "arraybuffer",
+                       headers: {
+                           Autorization: localStorage.getItem("token")
+                       }
+                   })
+
+                   const logo = window.URL.createObjectURL(
+                       new Blob([dataImage.data], {type: "image/png"})
+                   )
+                    Object.defineProperty(i, "imagenLogo", {value: logo})
+                    // console.log(i)
+                }
+
+            } catch (error) {    }
         }
+
+        // Obtener las imagenes de cada laboratorio
+
     },
 
     created(){
