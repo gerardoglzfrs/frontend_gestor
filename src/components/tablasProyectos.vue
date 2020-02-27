@@ -96,8 +96,8 @@ export default {
         nombreProyecto: "",
         headers: [
             {text: "Número", value: "numero", filerable: false},
-            {text: "nombre", value: "proyecto"},
-            {text: "estatus", value: "status", filerable: false},
+            {text: "Nombre", value: "proyecto"},
+            {text: "Estatus", value: "status", filerable: false},
             {text: "Acciones", value: "acciones", filerable: false}
         ],
         proyectos: [],
@@ -135,11 +135,9 @@ export default {
                     var value = ""+i
                     val[numero]=value;
                 }
-            
-                this.proyectos = data.oneLab.proyectos
-                this.loading = false
-                // console.log(data.oneLab.proyectos)
-                // this.Datos = data.allLabs;
+                this.proyectos = data.oneLab.proyectos;
+                this.loading = false;
+
             } catch (error) {
                console.log(error)
             }
@@ -149,13 +147,13 @@ export default {
             if (localStorage.getItem("token")===null) {
                 this.abrirLogin = true;
             }else{
-                this.open = true;
-                
+                this.open = true;item
             }
         },
 
         verInfo(proyecto){
             this.nombreProyecto = proyecto.proyecto;
+            EventBus.$emit("VerInfoProyecto", this.nombreProyecto)
             this.mostrarInfProyecto = true;   
         }
     },
@@ -173,6 +171,10 @@ export default {
         EventBus.$on("closeLoginTachita",()=>{
             this.abrirLogin =false;
         });
+        
+        EventBus.$on("CerrarVerProyecto", () => {
+            this.mostrarInfProyecto = false;
+        })
     },
     created(){
         this.obtenerProyectos();
