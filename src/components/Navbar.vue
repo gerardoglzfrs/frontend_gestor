@@ -41,13 +41,6 @@ export default {
       this.abrirLogin = false;
     });
 
-    // EventBus.$on("cerrarLoginNavbar", () =>{
-    //   console.log("hd");
-    //   setTimeout(() => {
-    //     this.abrirLogin = false;
-    //   },3000)
-    // });
-
     EventBus.$on("errorLogin", (msj) => {
       this.mensajeErrorLogin = msj  
       this.msjError = true
@@ -64,11 +57,6 @@ export default {
     EventBus.$on('cerrarRegistro', ()=>{
       this.openFormStudent = false;
     })
-
-    // EventBus.$on("registrado", (msj) => {
-    //   this.registrado = msj  
-    //   this.msjsuccess = true
-    // });
 
     EventBus.$on("regresarLogin", ()=>{
       this.abrirLogin = true;

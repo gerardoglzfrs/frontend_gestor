@@ -62,11 +62,11 @@ export default {
                         }
                     `,
                 })   
-                // console.log(data.allLabs)
                 this.Datos = data.allLabs;
                 
                 for(let i of this.Datos){
                    
+                // Obtener las imagenes de cada laboratorio
                   const dataImage = await axios.get(`/api/logos/sendImg/${i.nombre}`,{
                        responseType: "arraybuffer",
                        headers: {
@@ -78,13 +78,11 @@ export default {
                        new Blob([dataImage.data], {type: "image/png"})
                    )
                     Object.defineProperty(i, "imagenLogo", {value: logo})
-                    // console.log(i)
+
                 }
 
             } catch (error) {    }
         }
-
-        // Obtener las imagenes de cada laboratorio
 
     },
 

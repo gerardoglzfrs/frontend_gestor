@@ -44,7 +44,6 @@ import { mapActions } from 'vuex'
 export default {
     props: ['openModel'],
     name: 'Login',
-    // components: {Registro},
 
     data: () => ({
         openFormStudent: false,
@@ -66,24 +65,18 @@ export default {
 
     methods: {
         openModalStudent(){
-            // this.openFormStudent = true;
             EventBus.$emit("openModalStudent")
-            //
-            //EventBus.$emit("closeLogin");
         },
         
-        closeModalLogin(){EventBus.$on("regresarLogin", ()=>{
-    }) 
-            EventBus.$emit("closeLoginTachita");
+        closeModalLogin(){
+        EventBus.$emit("closeLoginTachita");
             try {
                 this.$refs.formLogin.reset();
             } catch (error) {
             }
-
         },
 
         ...mapActions(["login"]),
-
     },
 
     mounted(){
@@ -93,10 +86,6 @@ export default {
                 this.closeModalLogin();
             }
         });
-
-        // EventBus.$on('cerrarRegistro', ()=>{
-        //     this.openFormStudent = false;
-        // })
     }
 
 }

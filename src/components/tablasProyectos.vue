@@ -21,7 +21,7 @@
                     class="elevation-1" 
                     loading-text="Cargando..."
                     no-results-text="Proyecto no encontrado"
-                    :footer-props="{itemsPerPageText:'Proyectos por página'}"
+                    :footer-props="{itemsPerPageText:'Paginación'}"
                     :items="proyectos"> 
                         <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
                             <v-tooltip bottom>
@@ -97,6 +97,7 @@ export default {
         headers: [
             {text: "Número", value: "numero", filerable: false},
             {text: "Nombre", value: "proyecto"},
+            {text: "Alumnos requeridos", value: "numAlu"},
             {text: "Estatus", value: "status", filerable: false},
             {text: "Acciones", value: "acciones", filerable: false}
         ],
@@ -119,6 +120,7 @@ export default {
                                     proyecto
                                     status
                                     objetivo
+                                    numAlu
                                 }
                             }
                         }
