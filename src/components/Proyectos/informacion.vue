@@ -96,8 +96,8 @@ export default {
         },
          headers: [
             {text: "Número", value: "numero"},
-            {text: "Nombre", value: ""},
-            {text: "Institucion", value: ""},
+            {text: "Nombre", value: "nombre"},
+            {text: "Institucion", value: "institucion"},
         ],
     }),
 
@@ -114,8 +114,7 @@ export default {
                                 requerimientos
                                 perfiles
                                 habilidades
-                                numAlu
-                                
+                                numAlu  
                             }
                         }
                     `,
@@ -123,7 +122,8 @@ export default {
                         nombre: this.$route.params.nameLab,
                         proyecto: this.Infoproyecto
                     }   
-                })
+                }) 
+
             this.datosProyecto.alumnosRequeridos =data.proyecto.numAlu;
             this.datosProyecto.nombre =data.proyecto.proyecto,
             this.datosProyecto.objetivo =data.proyecto.objetivo,
@@ -132,13 +132,41 @@ export default {
             this.datosProyecto.habilidades =data.proyecto.habilidades
                
             } catch (error) {
-                console.log(error)
-            }    
+                
+            } 
         },
-        
         // Obtener los alumnos por proyecto
-        
+        async obtenerAlumnos(){
+            try {
+                const {data} = await this.$apollo.query({
+                    query: gql`
+                        query($nombre: String!, $proyecto: String!){
+                            alumnos(nombre: $nombre, proyecto: $proyecto){
+                                nombre,
+                                institucion
+                            }
+                        }
+                    `,
+                    variables: {
+                        nombre: this.$route.params.nameLab,
+                        proyecto: this.Infoproyecto
+                    }   
+                })
 
+                               
+                var i = 0;
+                for(let val of data.alumnos){
+                    i=i+1;
+                    var numero="numero";
+                    var value = ""+i
+                    val[numero]=value;
+                }
+                this.alumnos = data.alumnos;
+                
+            } catch (error) {
+                
+            }
+        },
 
         closeModalProyecto(){EventBus.$emit("CerrarVerProyecto")}
     },
@@ -154,6 +182,7 @@ export default {
         EventBus.$on("VerInfoProyecto", (proyecto)=>{
             this.Infoproyecto = proyecto;
             this.ObtenerInfoLab();
+            this.obtenerAlumnos();
         });
     }
 }

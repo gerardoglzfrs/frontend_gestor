@@ -7,16 +7,15 @@
             </p>
         <v-row>
             <v-col cols="12" md="4" lg="3" sm="6"  v-for="item of Datos" :key="item.nombre" class="my-2">
-                <v-card elevation="5" >
+                <v-card elevation="6" class="mx-auto" max-width="400">
                     <v-list-item> 
                         <v-list-item-content>
-                            <v-list-item-title class="subtitle-2"><p>{{ item.nombre }}</p></v-list-item-title>
+                            <v-list-item-title class="subtitle-2"><p class="text-center"><strong>{{ item.nombre }}</strong></p></v-list-item-title>
                         </v-list-item-content>
                     </v-list-item>
-                    <!-- <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="194"></v-img> -->
-                     <v-img :src="item.imagenLogo" height="200"></v-img>
+                    <v-img max-width="150" height="150px" :src="item.imagenLogo" />
                     <v-card-text class="text--primary">
-                        <div><strong>Total de proyectos: </strong>20</div>
+                        <div><strong>Total de proyectos: </strong>{{ item.count }}</div>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.nombre} }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos admin</v-btn> 
@@ -58,6 +57,7 @@ export default {
                         query{
                             allLabs{
                                 nombre
+                                count
                             }
                         }
                     `,
@@ -65,7 +65,6 @@ export default {
                 this.Datos = data.allLabs;
                 
                 for(let i of this.Datos){
-                   
                 // Obtener las imagenes de cada laboratorio
                   const dataImage = await axios.get(`/api/logos/sendImg/${i.nombre}`,{
                        responseType: "arraybuffer",
@@ -77,13 +76,12 @@ export default {
                    const logo = window.URL.createObjectURL(
                        new Blob([dataImage.data], {type: "image/png"})
                    )
+                      
                     Object.defineProperty(i, "imagenLogo", {value: logo})
-
                 }
 
-            } catch (error) {    }
-        }
-
+            } catch (error) {  }
+        },
     },
 
     created(){
@@ -95,6 +93,5 @@ export default {
             this.obtenerLaboratorios();
         })
     }
-   
 }
 </script>
