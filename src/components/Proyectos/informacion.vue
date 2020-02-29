@@ -1,20 +1,20 @@
 <template>
     <div>
-        <v-dialog v-model="visible"  max-width="1300" persistent>
+        <v-dialog v-model="visible" fullscreen hide-overlay transition="dialog-bottom-transition"  scrollable persistent>
             <v-card color="grey lighten-3">
                 <v-toolbar color="primary" dark>
-                    <v-card-title>Nombre del proyecto</v-card-title>
+                    <v-card-title>Información del proyecto</v-card-title>
                         <v-spacer />
                         <v-btn icon @click="closeModalProyecto()"><v-icon>fa fa-times</v-icon></v-btn>
                 </v-toolbar>
                 <v-card-text>
                      <v-card-subtitle class="subtitle-2 font-weight-black" style="padding: 5px;"><strong>Informacion del proyecto</strong></v-card-subtitle>
                         <v-row>
-                            <v-col cols="12" sm="12" md="8" lg="8">
+                            <v-col cols="12" sm="12" md="9" lg="9">
                                 <v-text-field prepend-icon="fa fa-info" label="Nombre" v-model="datosProyecto.nombre" clearable readonly/>
                             </v-col>
-                            <v-col cols="12" sm="12" md="4" lg="4">
-                                <v-text-field type="text" prepend-icon="fa fa-info" label="Alumnos requeridos" v-model="datosProyecto.alumnosRequeridos" min="1" clearable readonly/>
+                            <v-col cols="12" sm="12" md="3" lg="3">
+                                <v-text-field type="text" prepend-icon="fa fa-users" label="Alumnos requeridos" v-model="datosProyecto.alumnosRequeridos" min="1" clearable readonly/>
                             </v-col>
                         </v-row>
                         <v-row>   
@@ -64,6 +64,7 @@
                                  <v-data-table 
                                     :headers="headers"   
                                     class="elevation-1"
+                                    no-data-text="Aún no existen alumnos en este proyecto" 
                                     :footer-props="{itemsPerPageText:'Paginación'}" 
                                     :items="alumnos"> 
                                  </v-data-table>

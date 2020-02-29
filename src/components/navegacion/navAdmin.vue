@@ -5,7 +5,7 @@
                 <v-img src="@/assets/logo.png" />
             </v-toolbar-items>
             <v-spacer />
-            <v-toolbar-title>{{ usuarioLogeado.nombre }}</v-toolbar-title>
+            <v-toolbar-title>{{ usuarioLogeado.nombre.toUpperCase() }}</v-toolbar-title>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">
                     <v-btn text icon color="" v-on="on" @click="abrirModalRegLab">
@@ -16,37 +16,41 @@
             </v-tooltip>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">
-                    <v-btn text icon color="" v-on="on" @click="Logout">
+                    <v-btn text icon color="" v-on="on" @click="logOut">
                         <v-icon>fa fa-sign-out-alt</v-icon>
                     </v-btn>
                 </template>
                 <span>Cerrar sesion</span>
             </v-tooltip>
         </v-toolbar>
-
     <NuevoLaboratorio :agregarLaboratorio="abrirRegistroLab"/>
+    <Logout :confirmacionLogout="abrirLogout"/>
     </div>
 </template>
 
 <script>
 import { EventBus } from '@/EventBus'
 import NuevoLaboratorio from '@/components/Admins/NuevoLaboratorio'
-import { mapState, mapActions } from "vuex"
- 
+import { mapState } from "vuex"
+import Logout from '../Logout'
+
 export default {
     name: 'navAdmin',
-    components: { NuevoLaboratorio },
+    components: { NuevoLaboratorio, Logout },
 
     data: () => ({
-        abrirRegistroLab: false
+        abrirRegistroLab: false,
+        abrirLogout: false
     }),
 
     methods: {
-       abrirModalRegLab(){
-            this.abrirRegistroLab = true;
-       },
-
-       ...mapActions(["Logout"])
+        abrirModalRegLab(){
+                this.abrirRegistroLab = true;
+        },
+        
+        logOut(){
+            this.abrirLogout = true;
+        }
     },
 
     computed:{
@@ -56,12 +60,16 @@ export default {
     mounted(){
         EventBus.$on("cerrarRegistroLab", () => {
             this.abrirRegistroLab = false;
-        });
+        })
 
-        EventBus.$on("cerrarModelNuevoLaboratorio", ( ) => {
+        EventBus.$on("cerrarModelNuevoLaboratorio", () => {
             setTimeout(() => {
                 this.abrirRegistroLab = false;
             },3000);
+        })
+
+        EventBus.$on("cerrarLogoutAdmin", ()=>{
+            this.abrirLogout = false;
         })
     }
 }

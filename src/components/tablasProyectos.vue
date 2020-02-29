@@ -14,7 +14,7 @@
                         <v-spacer />
                         <v-text-field prepend-icon="fa fa-search" label="Buscar proyecto por nombre" v-model="filtro"></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" 
+                    <v-data-table :headers="headers" v-if="usuarioLogeado.tipUsuario === '1' && usuarioLogeado.nombre ===this.$route.params.nameLab"
                     :search="filtro" 
                     no-data-text="No existen proyectos disponibles" 
                     :loading="loading"
@@ -35,7 +35,7 @@
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
                                     <v-btn text icon color="green" v-on="on" @click="solicitarProyecto(item)">
-                                    <v-icon>fa fa-check-circle</v-icon>
+                                    <v-icon>fa fa-paper-plane</v-icon>
                                     </v-btn>
                                 </template>
                                 <span>Solicitar proyecto</span>
@@ -45,7 +45,7 @@
                         <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '0'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text icon color="primary" v-on="on"  @click="verInfo(item)">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
                                     <v-icon>fa fa-info</v-icon>
                                     </v-btn>
                                 </template>
@@ -56,7 +56,71 @@
                         <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '1'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text icon color="primary" v-on="on"  @click="verInfo(item)">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
+                                    <v-icon>fa fa-info</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Ver información</span>
+                            </v-tooltip>
+                        </template>
+                        <template v-slot:item.notificaciones="{item}" v-if="usuarioLogeado.tipUsuario === '1'">
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on}">
+                                    <v-btn text color="blue" v-on="on" @click="verInfo(item)">
+                                        <v-badge :content="item['notificaciones']" :value="item['notificaciones']" color="red" overlap>
+                                            <v-icon>fa fa-bell</v-icon>
+                                        </v-badge>
+                                    </v-btn>
+                                </template>
+                                <span>Ver solicitudes</span>
+                            </v-tooltip>
+                        </template>
+                    </v-data-table>
+
+                    <!-- para cuando no es el propietaro -->
+                    <v-data-table :headers="headers2" v-else
+                    :search="filtro" 
+                    no-data-text="No existen proyectos disponibles" 
+                    :loading="loading"
+                    class="elevation-1" 
+                    loading-text="Cargando..."
+                    no-results-text="Proyecto no encontrado"
+                    :footer-props="{itemsPerPageText:'Paginación'}"
+                    :items="proyectos"> 
+                        <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
+                                    <v-icon>fa fa-info</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Ver información</span>
+                            </v-tooltip>
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="green" v-on="on" @click="solicitarProyecto(item)">
+                                    <v-icon>fa fa-paper-plane</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Solicitar proyecto</span>
+                            </v-tooltip>
+                        </template>
+
+                        <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '0'">
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
+                                    <v-icon>fa fa-info</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Ver información</span>
+                            </v-tooltip>
+                        </template>
+
+                        <template v-slot:item.acciones="{item}" v-else-if="usuarioLogeado.tipUsuario === '1'">
+                            <v-tooltip bottom>
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
                                     <v-icon>fa fa-info</v-icon>
                                     </v-btn>
                                 </template>
@@ -88,6 +152,7 @@ export default {
     
     data: () => ({
         nombreRuta: "",
+        total: "",
         filtro: "",
         loading: true,
         abrirLogin: false,
@@ -99,10 +164,18 @@ export default {
             {text: "Nombre", value: "proyecto"},
             {text: "Alumnos requeridos", value: "numAlu"},
             {text: "Estatus", value: "status", filerable: false},
-            {text: "Acciones", value: "acciones", filerable: false}
+            {text: "Acciones", value: "acciones", filerable: false},
+            {text: "Solicitudes", value: "notificaciones", filerable: false}
+        ],
+        headers2: [
+            {text: "Número", value: "numero", filerable: false},
+            {text: "Nombre", value: "proyecto"},
+            {text: "Alumnos requeridos", value: "numAlu"},
+            {text: "Estatus", value: "status", filerable: false},
+            {text: "Acciones", value: "acciones", filerable: false},
         ],
         proyectos: [],
-        options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados']
+        options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados'],
     }),
 
     computed:{
@@ -134,7 +207,7 @@ export default {
                 for(let val of data.oneLab.proyectos){
                     i=i+1;
                     var numero="numero";
-                    var value = ""+i
+                    var value = ""+i;
                     val[numero]=value;
                 }
                 this.proyectos = data.oneLab.proyectos;
@@ -143,8 +216,44 @@ export default {
             } catch (error) {
                console.log(error)
             }
+            this.notificaciones();
+        },
+        async notificaciones(){
+            for(let val of this.proyectos){
+                let i =0;
+                try{
+                    const { data } = await this.$apollo.query({
+                        query:gql`
+                            query($nombre: String!, $proyecto: String!){
+                                proyecto(nombre: $nombre, proyecto: $proyecto){
+                                    alumnos{
+                                        status
+                                    }
+                                }
+                            }    
+                        `,
+                        variables:{
+                            nombre: this.$route.params.nameLab,
+                            proyecto: val.proyecto
+                        }
+                    })
+
+                    
+                    for(let val of data.proyecto.alumnos){
+                        if(val.status==="espera") i++
+                    }
+                    console.log(i);
+                    
+                }catch(err){
+                    console.log(err)
+                }
+                val["notificaciones"]=i;
+            }
+            console.log(this.proyectos);
+            
         },
 
+       
         solicitarProyecto(proyecto){
             if (localStorage.getItem("token")===null) {
                 this.abrirLogin = true;

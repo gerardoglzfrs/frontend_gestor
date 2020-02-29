@@ -5,7 +5,7 @@
                 <v-img src="@/assets/logo.png" />
             </v-toolbar-items>
             <v-spacer />
-            <v-toolbar-title>{{ usuarioLogeado.nombre }}</v-toolbar-title>
+            <v-toolbar-title>{{ usuarioLogeado.nombre.toUpperCase() }}</v-toolbar-title>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">
                     <v-btn text icon color="" v-on="on" @click="abrirModalRegProyecto">
@@ -16,36 +16,31 @@
             </v-tooltip>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">
-                    <v-btn text icon color="" v-on="on" :to="{ name: 'Proyectos'}">
-                        <v-icon>fa fa-tasks</v-icon>
-                    </v-btn>
-                </template>
-                <span>Proyectos</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-                <template v-slot:activator="{on}">
-                  <v-btn text icon color="" v-on="on" @click="Logout">
+                  <v-btn text icon color="" v-on="on" @click="logOut">
                     <v-icon>fa fa-sign-out-alt</v-icon>
                   </v-btn>
                 </template>
-                <span>Cerrar sesion</span>
+                <span>Cerrar sesión</span>
             </v-tooltip>
         </v-toolbar>
-        <NuevoProyecto  :abrirRegProyecto="añadirProyecto"/>
+        <NuevoProyecto :abrirRegProyecto="añadirProyecto"/>
+        <Logout :confirmacionLogout="abrirLogout"/>
     </div>
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex"
+import { mapState } from "vuex"
 import { EventBus } from "@/EventBus"
 import NuevoProyecto from "../Laboratorio/NuevoProyecto"
+import Logout from '../Logout'
 
 export default {
     name: "navLab",
-    components: { NuevoProyecto },
+    components: { NuevoProyecto, Logout },
 
     data: () => ({
-        añadirProyecto: false
+        añadirProyecto: false,
+        abrirLogout: false
     }),
     
     computed:{
@@ -53,20 +48,27 @@ export default {
     },
 
     methods: {
-        ...mapActions(["Logout"]),
-
         abrirModalRegProyecto(){
             this.añadirProyecto = true;
+        },
+
+        logOut(){
+            this.abrirLogout = true;
         }
+
     },
 
     mounted(){
         EventBus.$on('cerrarRegistroProyecto', () =>{
             this.añadirProyecto = false;
-        }),
+        });
 
         EventBus.$on("cerrarModalRegProyecto", ()=>{
             this.añadirProyecto = false
+        });
+
+         EventBus.$on("cerrarLogoutLab", ()=>{
+            this.abrirLogout = false;
         })
     
     }

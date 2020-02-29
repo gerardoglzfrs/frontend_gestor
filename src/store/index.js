@@ -15,7 +15,7 @@ export default new Vuex.Store({
     usuarioLogeado: {
       tipUsuario: "",
       nom_usuario: "",
-      nombre: ""
+      nombre: "",
     }
   },
 
