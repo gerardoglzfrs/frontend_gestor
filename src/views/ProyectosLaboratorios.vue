@@ -6,7 +6,7 @@
         <navAlum  v-else-if="usuarioLogeado.tipUsuario === '2'"/>
         
       <v-container>
-        <p class="display-1 text-center">{{ name }}</p>
+        <p class="display-1 text-center">{{ name.toUpperCase() }}</p>
         <hr>
         <tablasProyectos />
       </v-container>

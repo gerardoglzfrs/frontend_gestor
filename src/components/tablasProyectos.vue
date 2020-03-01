@@ -4,10 +4,10 @@
             <!-- Selector de categorias -->
             <v-row justify="center" v-if="usuarioLogeado.tipUsuario === '0' || usuarioLogeado.tipUsuario === '1'">
                 <v-col cols="12" sm="4">
-                    <v-select :items="options" outlined label="Seleccione la categoria"/>
+                    <v-select v-model="proyectosNuevos" :items="options" @input="categorias" outlined label="Seleccione la categoria"/>
                 </v-col>
             </v-row>
-
+            
             <v-row justify="center">
                 <v-card  class="my-4">
                     <v-card-title>Lista de proyectos
@@ -66,7 +66,7 @@
                         <template v-slot:item.notificaciones="{item}" v-if="usuarioLogeado.tipUsuario === '1'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
-                                    <v-btn text color="blue" v-on="on" @click="verInfo(item)">
+                                    <v-btn text color="blue" v-on="on" @click="verSolicitudes(item)">
                                         <v-badge :content="item['notificaciones']" :value="item['notificaciones']" color="red" overlap>
                                             <v-icon>fa fa-bell</v-icon>
                                         </v-badge>
@@ -135,6 +135,7 @@
         <Login :openModel="abrirLogin" />
         <Loading :openLoading="open" />
         <informacion :visible="mostrarInfProyecto" :nomProyecto="nombreProyecto"/>
+        <Solicitudes :mostrarSolocitudes="abrirModalSolicitud"/>
     </div>
 </template>
 
@@ -144,13 +145,16 @@ import Loading from '@/components/Loader/Loading'
 import informacion from '../components/Proyectos/informacion'
 import { EventBus } from '@/EventBus'
 import { mapState } from "vuex"
+import { apolloClient } from '../graphql/apollo'
 import gql from 'graphql-tag'
+import Solicitudes from '@/components/Laboratorio/Solicitudes'
 
 export default {
-    components: {Login, Loading, informacion},
+    components: {Login, Loading, informacion, Solicitudes},
     name: 'tablasProyectos',
     
     data: () => ({
+        proyectosNuevos: "Nuevos proyectos",
         nombreRuta: "",
         total: "",
         filtro: "",
@@ -158,7 +162,9 @@ export default {
         abrirLogin: false,
         open: null,
         mostrarInfProyecto: false,
+        abrirModalSolicitud: false,
         nombreProyecto: "",
+        selected: "Nuevos proyectos",
         headers: [
             {text: "Número", value: "numero", filerable: false},
             {text: "Nombre", value: "proyecto"},
@@ -183,34 +189,39 @@ export default {
     },
 
     methods: {
+        categorias(item){
+            this.selected = item;
+            this.obtenerProyectos();
+        },
+
+        // Obtener los proyectos de los laboratorios
         async obtenerProyectos(){
             try {
                 const { data } = await this.$apollo.query({
                     query:gql`
-                        query($nombre: String!){
-                            oneLab(nombre: $nombre){
-                                proyectos{
+                        query($nombre: String!, $proyectoCategoria: String!){
+                            oneLab(nombre: $nombre, proyectoCategoria: $proyectoCategoria){
                                     proyecto
                                     status
                                     objetivo
                                     numAlu
-                                }
                             }
                         }
                     `,
                     variables:{
-                        nombre: this.$route.params.nameLab
+                        nombre: this.$route.params.nameLab,
+                        proyectoCategoria: this.selected
                     }
                 }) 
                
                 var i = 0;
-                for(let val of data.oneLab.proyectos){
+                for(let val of data.oneLab){
                     i=i+1;
                     var numero="numero";
                     var value = ""+i;
                     val[numero]=value;
                 }
-                this.proyectos = data.oneLab.proyectos;
+                this.proyectos = data.oneLab;
                 this.loading = false;
 
             } catch (error) {
@@ -237,28 +248,40 @@ export default {
                             proyecto: val.proyecto
                         }
                     })
-
                     
                     for(let val of data.proyecto.alumnos){
                         if(val.status==="espera") i++
                     }
-                    console.log(i);
-                    
+
                 }catch(err){
                     console.log(err)
                 }
                 val["notificaciones"]=i;
             }
-            console.log(this.proyectos);
-            
         },
-
        
-        solicitarProyecto(proyecto){
+        async solicitarProyecto(proyecto){
             if (localStorage.getItem("token")===null) {
                 this.abrirLogin = true;
-            }else{
-                this.open = true;item
+                }else{
+            try{
+                this.open=true;
+                 const { data } = await apolloClient.mutate({
+                     mutation:gql`
+                            mutation($nombre: String!, $proyecto: String!)
+                            {
+                                solicitarProyecto(nombre: $nombre, proyecto: $proyecto)
+                            }    
+                        `,
+                        variables:{
+                            nombre: this.$route.params.nameLab,
+                            proyecto: proyecto.proyecto
+                        }
+                    })
+                }
+            catch(error){
+                console.log(error)
+            }
             }
         },
 
@@ -266,6 +289,12 @@ export default {
             this.nombreProyecto = proyecto.proyecto;
             EventBus.$emit("VerInfoProyecto", this.nombreProyecto)
             this.mostrarInfProyecto = true;   
+        },
+
+        verSolicitudes(proyecto){
+            this.nombreProyecto = proyecto.proyecto;
+            EventBus.$emit("verSolicitudesProyecto", this.nombreProyecto)
+            this.abrirModalSolicitud = true;
         }
     },
     mounted(){
@@ -285,7 +314,12 @@ export default {
         
         EventBus.$on("CerrarVerProyecto", () => {
             this.mostrarInfProyecto = false;
-        })
+        });
+
+        EventBus.$on("cerrarModalSolicitud",()=>{
+            this.abrirModalSolicitud = false;
+            this.notificaciones();
+        });
     },
     created(){
         this.obtenerProyectos();

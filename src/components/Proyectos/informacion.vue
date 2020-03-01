@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-dialog v-model="visible" fullscreen hide-overlay transition="dialog-bottom-transition"  scrollable persistent>
+        <v-dialog v-model="visible" fullscreen hide-overlay transition="dialog-bottom-transition" persistent>
             <v-card color="grey lighten-3">
                 <v-toolbar color="primary" dark>
                     <v-card-title>Información del proyecto</v-card-title>
@@ -58,16 +58,16 @@
                                 </v-textarea>
                             </v-col>
                         </v-row>
+                        <v-row v-if="usuarioLogeado.tipUsuario === '1' && usuarioLogeado.nombre ===this.$route.params.nameLab">
                         <v-card-subtitle class="subtitle-2 font-weight-black" style="padding: 5px;"><strong>Integrantes del desarrollo</strong></v-card-subtitle>
-                        <v-row>
                             <v-col cols="12" sm="12" md="12" lg="12">
-                                 <v-data-table 
+                                <v-data-table 
                                     :headers="headers"   
                                     class="elevation-1"
                                     no-data-text="Aún no existen alumnos en este proyecto" 
                                     :footer-props="{itemsPerPageText:'Paginación'}" 
-                                    :items="alumnos"> 
-                                 </v-data-table>
+                                    :items="alumnos">
+                                </v-data-table>
                             </v-col>
                         </v-row>
                 </v-card-text>
@@ -79,9 +79,11 @@
 <script>
 import gql from 'graphql-tag'
 import { EventBus } from '@/EventBus'
+import { mapState } from "vuex"
+import { apolloClient } from '../../graphql/apollo'
 
 export default {
-    name: "informacion",
+    name: "Informacion",
     props: ["visible","nomProyecto"],
 
     data: ()=>({
@@ -95,15 +97,22 @@ export default {
             perfiles: "",
             habilidades: ""
         },
-         headers: [
+        headers: [
             {text: "Número", value: "numero"},
             {text: "Nombre", value: "nombre"},
-            {text: "Institucion", value: "institucion"},
+            {text: "Institución", value: "institucion"},
+            {text: "Carrera", value: "carrera"},
+            {text: "Correo", value: "correo"},
+            {text: "Teléfono", value: "telefono"},
         ],
     }),
 
+    computed:{
+        ...mapState(["usuarioLogeado"])
+    },
+
     methods: {
-        // obtener infonomProyectormacion de un laboratorio
+        // Obtener informacion de un proyecto de un laboratorio
         async ObtenerInfoLab(){
             try {
                 const {data} = await this.$apollo.query({
@@ -138,23 +147,28 @@ export default {
         },
         // Obtener los alumnos por proyecto
         async obtenerAlumnos(){
+            let status = "aceptado";
             try {
                 const {data} = await this.$apollo.query({
                     query: gql`
-                        query($nombre: String!, $proyecto: String!){
-                            alumnos(nombre: $nombre, proyecto: $proyecto){
-                                nombre,
+                        query($nombre: String!, $proyecto: String!, $status: String!){
+                            alumnos(nombre: $nombre, proyecto: $proyecto, status: $status){
+                                _id
+                                nombre
                                 institucion
+                                carrera
+                                correo
+                                telefono
                             }
                         }
                     `,
                     variables: {
                         nombre: this.$route.params.nameLab,
-                        proyecto: this.Infoproyecto
-                    }   
+                        proyecto: this.Infoproyecto,
+                        status: status
+                    } 
                 })
-
-                               
+              
                 var i = 0;
                 for(let val of data.alumnos){
                     i=i+1;
@@ -163,7 +177,6 @@ export default {
                     val[numero]=value;
                 }
                 this.alumnos = data.alumnos;
-                
             } catch (error) {
                 
             }
@@ -179,7 +192,7 @@ export default {
                 EventBus.$emit("CerrarVerProyecto")
             }
         });
-        // console.log(this.nomProyecto);
+     
         EventBus.$on("VerInfoProyecto", (proyecto)=>{
             this.Infoproyecto = proyecto;
             this.ObtenerInfoLab();
