@@ -4,7 +4,8 @@
             <!-- Selector de categorias -->
             <v-row justify="center" v-if="usuarioLogeado.tipUsuario === '0' || usuarioLogeado.tipUsuario === '1'">
                 <v-col cols="12" sm="4">
-                    <v-select v-model="proyectosNuevos" :items="options" @input="categorias" outlined label="Seleccione la categoria"/>
+                    <v-select v-if="usuarioLogeado.nombre != this.$route.params.nameLab && !usuarioLogeado.tipUsuario==='0'" v-model="proyectosNuevos" :items="options2" @input="categorias" outlined label="Seleccione la categoria"/>
+                    <v-select v-else v-model="proyectosNuevos" :items="options" @input="categorias" outlined label="Seleccione la categoria"/>
                 </v-col>
             </v-row>
             
@@ -14,7 +15,7 @@
                         <v-spacer />
                         <v-text-field prepend-icon="fa fa-search" label="Buscar proyecto por nombre" v-model="filtro"></v-text-field>
                     </v-card-title>
-                    <v-data-table :headers="headers" v-if="usuarioLogeado.tipUsuario === '1' && usuarioLogeado.nombre ===this.$route.params.nameLab"
+                    <v-data-table :headers="headers" v-if="usuarioLogeado.tipUsuario === '1' && usuarioLogeado.nombre === this.$route.params.nameLab"
                     :search="filtro" 
                     no-data-text="No existen proyectos disponibles" 
                     :loading="loading"
@@ -22,7 +23,7 @@
                     loading-text="Cargando..."
                     no-results-text="Proyecto no encontrado"
                     :footer-props="{itemsPerPageText:'Paginación'}"
-                    :items="proyectos"> 
+                    :items="proyectos">
                         <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
@@ -87,7 +88,7 @@
                     no-results-text="Proyecto no encontrado"
                     :footer-props="{itemsPerPageText:'Paginación'}"
                     :items="proyectos"> 
-                        <template v-slot:item.acciones="{item}" v-if="usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2'">
+                        <template v-slot:item.acciones="{item}" v-if="(usuarioLogeado.tipUsuario === '' || usuarioLogeado.tipUsuario === '2')">
                             <v-tooltip bottom>
                                 <template v-slot:activator="{on}">
                                     <v-btn text icon color="primary" v-on="on" @click="verInfo(item)">
@@ -114,6 +115,22 @@
                                     </v-btn>
                                 </template>
                                 <span>Ver información</span>
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="selected ==='Nuevos proyectos'">
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="green" v-on="on" @click="solicitudProyecto(item['proyecto'], 'Aceptado')">
+                                    <v-icon>fa fa-check</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Aceptar proyecto</span>
+                            </v-tooltip>
+                            <v-tooltip bottom v-if="selected ==='Nuevos proyectos'">
+                                <template v-slot:activator="{on}">
+                                    <v-btn text icon color="red" v-on="on" @click="solicitudProyecto(item['proyecto'], 'Rechazado')">
+                                    <v-icon>fa fa-times</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Rechazar proyecto</span>
                             </v-tooltip>
                         </template>
 
@@ -168,20 +185,23 @@ export default {
         headers: [
             {text: "Número", value: "numero", filerable: false},
             {text: "Nombre", value: "proyecto"},
-            {text: "Alumnos requeridos", value: "numAlu"},
+            {text: "Alumnos requeridos", value: "numAlu", align: 'center', sortable: false, value: 'numAlu'},
             {text: "Estatus", value: "status", filerable: false},
-            {text: "Acciones", value: "acciones", filerable: false},
-            {text: "Solicitudes", value: "notificaciones", filerable: false}
+            {text: "Acciones", value: "acciones", filerable: false, align: 'center', sortable: false, value: 'acciones'},
+            {text: "Solicitudes", value: "notificaciones", filerable: false, align: 'center', sortable: false, value: 'notificaciones'}
         ],
         headers2: [
             {text: "Número", value: "numero", filerable: false},
             {text: "Nombre", value: "proyecto"},
-            {text: "Alumnos requeridos", value: "numAlu"},
+            {text: "Alumnos requeridos", value: "numAlu", align: 'center', sortable: false, value: 'numAlu'},
             {text: "Estatus", value: "status", filerable: false},
-            {text: "Acciones", value: "acciones", filerable: false},
+            {text: "Acciones", value: "acciones", filerable: false, align: 'center', sortable: false, value: 'acciones'},
         ],
+        com: [],
         proyectos: [],
         options: ['Nuevos proyectos', 'Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados'],
+        options2: ['Proyectos en catalogo', 'Proyectos en desarrollo', 'Proyectos finalizados'],
+
     }),
 
     computed:{
@@ -191,7 +211,34 @@ export default {
     methods: {
         categorias(item){
             this.selected = item;
+            if(item==="Proyectos en catalogo") {
+                this.headers = this.com
+            }else{
+                this.headers = this.headers2
+            }
             this.obtenerProyectos();
+        },
+        
+        //Aceptar o rechazar proyectos de laboratorios
+        async solicitudProyecto(proyecto, estatus){
+            try {
+                const {data} = await apolloClient.mutate({
+                    mutation: gql`
+                        mutation($proyecto: String!, $nombre: String!, $estatus: String!)
+                        {
+                            aceptarNuevoProyecto(proyecto: $proyecto, nombre: $nombre, accion: $estatus)
+                        }
+                    `,
+                    variables: {
+                        proyecto: proyecto,
+                        nombre: this.$route.params.nameLab,
+                        estatus: estatus
+                    }
+                }) 
+                this.obtenerProyectos();
+            } catch (error) {
+                console.log(error)
+            }
         },
 
         // Obtener los proyectos de los laboratorios
@@ -250,7 +297,7 @@ export default {
                     })
                     
                     for(let val of data.proyecto.alumnos){
-                        if(val.status==="espera") i++
+                        if(val.status==="Nuevo") i++
                     }
 
                 }catch(err){
@@ -298,6 +345,13 @@ export default {
         }
     },
     mounted(){
+        this.com = this.headers;
+        this.headers = this.headers2;
+        if((this.usuarioLogeado.tipUsuario === '2' || this.usuarioLogeado.tipUsuario === '' || this.usuarioLogeado.nombre != this.$route.params.nameLab) && this.usuarioLogeado.tipUsuario != '0'){
+            this.selected = 'Proyectos en catalogo'
+            this.proyectosNuevos = 'Proyectos en catalogo'
+            this.obtenerProyectos();
+        }
         EventBus.$on("cerrarLoginTabla",() => {
            setTimeout(()=>{
             this.abrirLogin = false;

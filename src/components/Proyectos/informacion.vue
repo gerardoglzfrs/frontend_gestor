@@ -147,7 +147,7 @@ export default {
         },
         // Obtener los alumnos por proyecto
         async obtenerAlumnos(){
-            let status = "aceptado";
+            let status = "Aceptado";
             try {
                 const {data} = await this.$apollo.query({
                     query: gql`

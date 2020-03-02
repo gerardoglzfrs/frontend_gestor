@@ -65,7 +65,6 @@ export default new Vuex.Store({
               commit("guardarUsuarioLog")
             },3000)
             EventBus.$emit("cerrarLoginTabla");
-            
             break;
         }
 
@@ -123,8 +122,7 @@ export default new Vuex.Store({
           `
         })
         localStorage.removeItem("token")
-        // router.push({ name: 'ListaLaboratorios' })
-        location.reload();
+        window.location.replace("/");
       } catch (error) {
         
       }

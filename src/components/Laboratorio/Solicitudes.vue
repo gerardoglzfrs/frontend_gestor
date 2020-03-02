@@ -19,7 +19,7 @@
                                 <template v-slot:item.solicitudes="{item}" >
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{on}">
-                                            <v-btn text icon color="green" v-on="on" @click="respuestaSolicitud(item['_id'],'aceptado')">
+                                            <v-btn text icon color="green" v-on="on" @click="respuestaSolicitud(item['_id'],'Aceptado')">
                                             <v-icon>fa fa-check</v-icon>
                                             </v-btn>
                                         </template>
@@ -27,7 +27,7 @@
                                     </v-tooltip>
                                     <v-tooltip bottom>
                                         <template v-slot:activator="{on}">
-                                            <v-btn text icon color="red" v-on="on" @click="respuestaSolicitud(item['_id'],'rechazado')">
+                                            <v-btn text icon color="red" v-on="on" @click="respuestaSolicitud(item['_id'],'Rechazado')">
                                             <v-icon>fa fa-times</v-icon>
                                             </v-btn>
                                         </template>
@@ -133,7 +133,7 @@ export default {
 
         // Obtener los alumnos por proyecto
         async obtenerAlumnos(){
-            let status = "espera";
+            let status = "Nuevo";
             try {
                 const {data} = await this.$apollo.query({
                     query: gql`
@@ -151,11 +151,12 @@ export default {
                     variables: {
                         nombre: this.$route.params.nameLab,
                         proyecto: this.Infoproyecto,
-                        status: status
+                        status: 'Nuevo'
                     } 
 
                 })
-              
+                console.log(data);
+                
                 var i = 0;
                 for(let val of data.alumnos){
                     i=i+1;
