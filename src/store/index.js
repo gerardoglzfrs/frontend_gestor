@@ -47,7 +47,7 @@ export default new Vuex.Store({
               clave: user.password 
             }
         }) 
-        
+
         const mensajeError = data.login;
        
         switch (mensajeError) {
@@ -67,7 +67,7 @@ export default new Vuex.Store({
             EventBus.$emit("cerrarLoginTabla");
             break;
         }
-
+      
       } catch (error) {
         
       }
@@ -151,7 +151,8 @@ export default new Vuex.Store({
         const msj = data.agregarProyecto
 
         if (msj === "Proyecto registrado") {
-          EventBus.$emit("proyectoRegistrado", msj)  
+          EventBus.$emit("proyectoRegistrado", msj)
+          EventBus.$emit("ActualizarTablaProyectos");
         }else{
           EventBus.$emit("errorRegProyecto", msj)  
         }

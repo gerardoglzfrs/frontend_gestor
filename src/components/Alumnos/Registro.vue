@@ -123,21 +123,21 @@ export default {
             value => !!value || "El nombre es requerido",
             value => {
                 const nombre = /[`~!@#$%^&*()_°¬|+\-=?;:'"1234567890,<>\{\}\[\]\\\/]/gi;
-				return !nombre.test(value) || "Solo permitidas letras";
+				return !nombre.test(value) || "Solo se permiten letras";
             }
         ],
         apAlumno: [
             value => !!value || "El apellido paterno es requerido",
             value => {
                 const nombre = /[`~!@#$%^&*()_°¬|+\-=?;:'"1234567890,<>\{\}\[\]\\\/]/gi;
-				return !nombre.test(value) || "Solo permitidas letras";
+				return !nombre.test(value) || "Solo se permiten letras";
             }
         ],
         amAlumno: [
             value => !!value || "El apellido materno es requerido",
             value => {
                 const nombre = /[`~!@#$%^&*()_°¬|+\-=?;:'"1234567890,<>\{\}\[\]\\\/]/gi;
-				return !nombre.test(value) || "Solo permitidas letras";
+				return !nombre.test(value) || "Solo se permiten letras";
             }
         ],
         domicilioAlumno: [
@@ -159,14 +159,14 @@ export default {
             value => !!value || "La institución es requerida",
             value => {
                 const nombre = /[`~!@$%^&*()_°¬|+\-=?;:'",<>\{\}\[\]\\\/]/gi;
-				return !nombre.test(value) || "Solo permitidas letras";
+				return !nombre.test(value) || "Solo se permiten letras";
             }
         ],
         carreraAlumno: [
             value => !!value || "La carrera es requerida",
             value => {
                 const nombre = /[`~!@#$%^&*()_°¬|+\-=?;:'"1234567890,<>\{\}\[\]\\\/]/gi;
-				return !nombre.test(value) || "Solo permitidas letras";
+				return !nombre.test(value) || "Solo se permiten letras";
             }
         ],
         semestreAlumno: [
@@ -175,11 +175,11 @@ export default {
         ],
         usuarioAlumno: [
             value => !!value || "El usuario es requerido",
-            value => (value || "").length > 7 || "Minimo 8 digitos"
+            value => (value || "").length > 7 || "Minimo 8 caracteres"
         ],
         pswAlumno: [
             value => !!value || "La contraseña es requerida",
-            value => (value || "").length > 7 || "Minimo 8 "
+            value => (value || "").length > 7 || "Minimo 8 caracteres"
         ]        
     }),
 

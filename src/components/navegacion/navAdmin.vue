@@ -63,9 +63,7 @@ export default {
         })
 
         EventBus.$on("cerrarModelNuevoLaboratorio", () => {
-            setTimeout(() => {
-                this.abrirRegistroLab = false;
-            },3000);
+            this.abrirRegistroLab = false;
         })
 
         EventBus.$on("cerrarLogoutAdmin", ()=>{

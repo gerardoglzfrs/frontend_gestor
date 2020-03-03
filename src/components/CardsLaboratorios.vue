@@ -7,8 +7,8 @@
             </p>
         <v-row>
             <v-col cols="12" md="4" lg="3" sm="6"  v-for="item of Datos" :key="item.nombre" class="my-2">
-                <v-card elevation="4" class="mx-auto" max-width="400">
-                    <v-toolbar elevation="4" color="white">
+                <v-card elevation="4" style="width: 150%" height="100%">
+                    <v-toolbar color="white">
                     <v-card-title class="text-center">{{ item.nombre.toUpperCase() }}</v-card-title>
                         <v-spacer />
                          <v-badge v-if="item['notificaciones'] != '' && usuarioLogeado.tipUsuario === '0'" :content="item['notificaciones']" :value="item['notificaciones']" color="red" overlap>
@@ -16,8 +16,12 @@
                         </v-badge>
                     </v-toolbar>
                     <hr class="mb-2">
-                    <v-img id="redimencionar" :src="item.imagenLogo" />
-                    <v-card-text>Total de proyectos: {{ item.count }}</v-card-text>
+                    <v-card-text style="height: 200px;">
+                        <v-container style="width: 42%; margin: 0 auto 0 auto; padding: 1%;">
+                            <v-img id="redimencionar" style="max-width: 100%;" :src="item.imagenLogo" />
+                        </v-container>
+                    </v-card-text>
+                    <v-card-text class="mt-2">Total de proyectos: {{ item.count }}</v-card-text>
                     <v-card-actions>
                         <v-btn text color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.nombre} }" v-if="usuarioLogeado.tipUsuario === '0'" >Ver proyectos</v-btn> 
                         <v-btn dark block color="primary accent-4" :to="{ name: 'ProyectosLaboratorios', params:{nameLab:item.nombre} }" v-else-if="usuarioLogeado.tipUsuario === '1' && item['nombre'] === usuarioLogeado.nombre">Mis proyectos</v-btn>
@@ -100,11 +104,5 @@ export default {
 </script>
 
 <style scoped>
-    #redimencionar{
-        height: 300px;
-        width: auto;
-        object-fit: cover;
-        object-position: center center;
-        background-size: cover;
-    }
+   
 </style>

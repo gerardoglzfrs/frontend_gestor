@@ -374,6 +374,10 @@ export default {
             this.abrirModalSolicitud = false;
             this.notificaciones();
         });
+
+        EventBus.$on("ActualizarTablaProyectos", ()=>{
+            this.obtenerProyectos();
+        })
     },
     created(){
         this.obtenerProyectos();
