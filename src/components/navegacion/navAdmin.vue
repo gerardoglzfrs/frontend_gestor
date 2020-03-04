@@ -2,7 +2,8 @@
     <div>
         <v-toolbar color="primary" dark >
             <v-toolbar-items>
-                <v-img src="@/assets/logo.png" />
+                <v-img src="@/assets/ILN.png" />
+                <v-img class="mt-4" style="height: 30px; width: 80px" src="@/assets/labsol.png" />
             </v-toolbar-items>
             <v-spacer />
             <v-toolbar-title>{{ usuarioLogeado.nombre.toUpperCase() }}</v-toolbar-title>

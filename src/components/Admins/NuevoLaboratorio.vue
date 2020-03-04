@@ -3,7 +3,7 @@
         <v-snackbar color="green" v-model="msjsuccess" top>¡{{ msjSatisfactorio }}! <v-btn color="white" text @click="msjsuccess=false">Cerrar</v-btn></v-snackbar>
         <v-snackbar color="red" v-model="msjerror" top>¡{{ msjErrorRegistro }}! <v-btn color="white" text @click="msjerror=false">Cerrar</v-btn></v-snackbar>
 
-        <v-dialog v-model="agregarLaboratorio" max-width="850" persistent>
+        <v-dialog v-model="agregarLaboratorio" max-width="950" persistent>
             <v-form ref="formLaboratorio" v-model="isValid"> 
                 <v-card color="grey lighten-3">
                     <v-toolbar color="primary" dark>
@@ -15,10 +15,13 @@
                         <v-card-subtitle class="subtitle-2" front-weight-black style="padding: 5px;"><strong>Datos del laboratorio</strong></v-card-subtitle>
                         <v-container fluid>
                             <v-row>
-                                <v-col cols="12" sm="6" md="6" lg="6">
+                                <v-col cols="12" sm="4" md="4" lg="4">
                                     <v-text-field :rules="nombre" prepend-icon="fa fa-id-card" label="Nombre del laboratorio" v-model="datosRegistro.nombre" clearable />
                                 </v-col>
-                                <v-col cols="12" sm="6" md="6" lg="6">
+                                <v-col cols="12" sm="4" md="4" lg="4">
+                                    <v-select :rules="tipLabs" :items="tipLab"  prepend-icon="fa fa-university" label="Tipo de laboratorio" v-model="datosRegistro.tipoLaboratorio"  clearable />
+                                </v-col>
+                                <v-col cols="12" sm="4" md="4" lg="4">
                                     <v-file-input :rules="ruleslogo" @change="obtenerlogo($event)" accept="image/*" label="Logo de la institución" prepend-icon="fa fa-file-image" show-size chips></v-file-input>
                                 </v-col>
                             </v-row>
@@ -68,8 +71,10 @@ export default {
         show: false,
         show1: false,
         pswConfirm: "",
+        tipLab:['Intel', 'Labsol'],
         datosRegistro: {
             nombre: '',
+            tipoLaboratorio: '',
             usuario: '',
             psw: ''
         },
@@ -79,6 +84,9 @@ export default {
         ],
         nombre: [
             value => !!value || "El nombre requerido"
+        ],
+        tipLabs: [
+             value => !!value || "Seleccione el tipo de laboratorio"
         ],
         usuario: [
             value => !!value || "El usuario requerido"
@@ -115,13 +123,14 @@ export default {
             try {              
                 const {data} = await this.$apollo.mutate({
                     mutation: gql`
-                        mutation($nombre: String!, $usuario: String!, $psw: String!)
+                        mutation($nombre: String!, $tipoLaboratorio: String!, $usuario: String!, $psw: String!)
                         {
-                            nuevoLab(nombre: $nombre, usuario: $usuario, clave: $psw)
+                            nuevoLab(nombre: $nombre, tipoLaboratorio: $tipoLaboratorio, usuario: $usuario, clave: $psw)
                         }
                     `,
                     variables: {
                         nombre: this.datosRegistro.nombre,
+                        tipoLaboratorio: this.datosRegistro.tipoLaboratorio,
                         usuario: this.datosRegistro.usuario,
                         psw: this.datosRegistro.psw
                     }
@@ -173,6 +182,8 @@ export default {
                 this.cerrarModal();
             }    
         });
+
+       
     }
 }
 </script>

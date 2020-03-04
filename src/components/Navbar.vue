@@ -4,7 +4,8 @@
         <!-- Navbar para logeo -->
         <v-toolbar color="primary" dark> 
           <v-toolbar-items>
-            <v-img src="@/assets/logo.png" />
+            <v-img src="@/assets/ILN.png" />
+            <v-img class="mt-3" style="height: 30px; width: 80px" src="@/assets/labsol.png" />
           </v-toolbar-items>
           <v-spacer />
           <v-btn text @click="open"><v-icon>mdi-user</v-icon> Iniciar sesion</v-btn>
