@@ -9,7 +9,7 @@
                 </v-col>
             </v-row>
             
-            <v-row justify="center">
+            <v-row justify="center" v-if="labExistente===1">
                 <v-card  class="my-4">
                     <v-card-title>Lista de proyectos
                         <v-spacer />
@@ -147,6 +147,21 @@
                     </v-data-table>
                 </v-card>
             </v-row>
+            <v-container style="display: flex; justify-content: center;" v-else-if="labExistente===2">   
+                <v-card color="grey lighten-4" width="400">
+                    <v-toolbar color="red" dark>
+                        <v-row class="justify-center">
+                            <v-card-title >¡Error 404!</v-card-title> 
+                        </v-row>
+                    </v-toolbar>
+                    <v-card-text>
+                        <h1 class="text-center">El laboratorio no existe</h1>
+                    </v-card-text>
+                    <v-card-actions>
+                        <v-btn block color="red" outlined to="/">Regresar al inicio</v-btn>
+                    </v-card-actions>
+                </v-card>
+            </v-container>
         </v-container>
 
         <Login :openModel="abrirLogin" />
@@ -171,6 +186,7 @@ export default {
     name: 'tablasProyectos',
     
     data: () => ({
+        labExistente: 0,
         proyectosNuevos: "Nuevos proyectos",
         nombreRuta: "",
         total: "",
@@ -237,7 +253,7 @@ export default {
                 }) 
                 this.obtenerProyectos();
             } catch (error) {
-                console.log(error)
+                
             }
         },
 
@@ -260,7 +276,11 @@ export default {
                         proyectoCategoria: this.selected
                     }
                 }) 
-               
+                if(data.oneLab!=null) {
+                    this.labExistente=1;
+                }else{
+                    this.labExistente=2;
+                }
                 var i = 0;
                 for(let val of data.oneLab){
                     i=i+1;
@@ -272,7 +292,7 @@ export default {
                 this.loading = false;
 
             } catch (error) {
-               console.log(error)
+               
             }
             this.notificaciones();
         },

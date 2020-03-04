@@ -10,11 +10,6 @@ const routes = [
     component: () => import('../views/ListaLaboratorios.vue')
   },
   {
-    path: '/:nameLab',
-    name: 'ProyectosLaboratorios',
-    component: () => import('../views/ProyectosLaboratorios.vue')
-  },
-  {
     path: '/admins',
     name: 'Admins',
     component: () => import('../views/Admins/Admins.vue')
@@ -25,27 +20,24 @@ const routes = [
    component: () => import('../views/Admins/ProyectosLabs.vue')
   },
   {
-    path: '/laboratorio',
-    name: 'Labs',
-    component: () => import('../views/Laboratorio/Labs')
-  },
-  // Esta ruta es de prueba
-  {
-    path: '/metodologia',
-    name: 'Metodologia',
-    component: () => import('../components/Proyectos/Metodologia')
-  },
-  {
     path: '/Proyectos',
     name: 'Proyectos',
     component: () => import('../views/Laboratorio/Proyectos')
   },
-  // Esta ruta es de prueba
   {
     path: '/Perfil',
     name: 'Perfil',
     component: () => import('../views/Alumnos/Perfil.vue')
-  }
+  },
+  {
+    path: '/laboratorio/:nameLab',
+    name: 'ProyectosLaboratorios',
+    component: () => import('../views/ProyectosLaboratorios.vue')
+  },
+  {
+    path: '*',
+    redirect: '/'
+  },
 ]
 
 const router = new VueRouter({

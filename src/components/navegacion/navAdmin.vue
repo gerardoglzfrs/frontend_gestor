@@ -12,7 +12,7 @@
                         <v-icon>fa fa-plus</v-icon>
                     </v-btn>
                 </template>
-                <span>Nuevo laboratorio</span>
+                <span>Agregar laboratorio</span>
             </v-tooltip>
             <v-tooltip bottom>
                 <template v-slot:activator="{on}">

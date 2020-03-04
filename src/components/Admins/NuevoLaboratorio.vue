@@ -145,11 +145,11 @@ export default {
                     setTimeout(()=>{
                         this.msjsuccess = false;
                         EventBus.$emit("cerrarModelNuevoLaboratorio");
+                        try {
+                            this.$refs.formLaboratorio.reset();
+                        } catch (error) {
+                        }
                     }, 3000);
-                    try {
-                        this.$refs.formLaboratorio.reset();
-                    } catch (error) {
-                    }
                     EventBus.$emit("actualizar");
                 } else {
                     this.msjErrorRegistro = msj;
